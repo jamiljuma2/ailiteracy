@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicLipanaWebhookRouteImport } from './routes/api/public/lipana-webhook'
-import { Route as ApiLipanaStkPushRouteImport } from './routes/api/lipana/stk-push'
+import { Route as ApiPublicLipanaStkPushRouteImport } from './routes/api/public/lipana/stk-push'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,40 +23,44 @@ const ApiPublicLipanaWebhookRoute = ApiPublicLipanaWebhookRouteImport.update({
   path: '/api/public/lipana-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiLipanaStkPushRoute = ApiLipanaStkPushRouteImport.update({
-  id: '/api/lipana/stk-push',
-  path: '/api/lipana/stk-push',
+const ApiPublicLipanaStkPushRoute = ApiPublicLipanaStkPushRouteImport.update({
+  id: '/api/public/lipana/stk-push',
+  path: '/api/public/lipana/stk-push',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/api/lipana/stk-push': typeof ApiLipanaStkPushRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
+  '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/api/lipana/stk-push': typeof ApiLipanaStkPushRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
+  '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/api/lipana/stk-push': typeof ApiLipanaStkPushRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
+  '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/lipana/stk-push' | '/api/public/lipana-webhook'
+  fullPaths: '/' | '/api/public/lipana-webhook' | '/api/public/lipana/stk-push'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/lipana/stk-push' | '/api/public/lipana-webhook'
-  id: '__root__' | '/' | '/api/lipana/stk-push' | '/api/public/lipana-webhook'
+  to: '/' | '/api/public/lipana-webhook' | '/api/public/lipana/stk-push'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/public/lipana-webhook'
+    | '/api/public/lipana/stk-push'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ApiLipanaStkPushRoute: typeof ApiLipanaStkPushRoute
   ApiPublicLipanaWebhookRoute: typeof ApiPublicLipanaWebhookRoute
+  ApiPublicLipanaStkPushRoute: typeof ApiPublicLipanaStkPushRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,11 +79,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicLipanaWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/lipana/stk-push': {
-      id: '/api/lipana/stk-push'
-      path: '/api/lipana/stk-push'
-      fullPath: '/api/lipana/stk-push'
-      preLoaderRoute: typeof ApiLipanaStkPushRouteImport
+    '/api/public/lipana/stk-push': {
+      id: '/api/public/lipana/stk-push'
+      path: '/api/public/lipana/stk-push'
+      fullPath: '/api/public/lipana/stk-push'
+      preLoaderRoute: typeof ApiPublicLipanaStkPushRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -87,9 +91,18 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ApiLipanaStkPushRoute: ApiLipanaStkPushRoute,
   ApiPublicLipanaWebhookRoute: ApiPublicLipanaWebhookRoute,
+  ApiPublicLipanaStkPushRoute: ApiPublicLipanaStkPushRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

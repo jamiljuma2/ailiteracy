@@ -14,7 +14,107 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      enrollments: {
+        Row: {
+          amount: number
+          checkout_request_id: string | null
+          course_access: boolean
+          created_at: string
+          email: string
+          failure_reason: string | null
+          full_name: string
+          id: string
+          merchant_request_id: string | null
+          mpesa_receipt: string | null
+          payment_status: string
+          phone: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          checkout_request_id?: string | null
+          course_access?: boolean
+          created_at?: string
+          email: string
+          failure_reason?: string | null
+          full_name: string
+          id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          payment_status?: string
+          phone: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          checkout_request_id?: string | null
+          course_access?: boolean
+          created_at?: string
+          email?: string
+          failure_reason?: string | null
+          full_name?: string
+          id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          payment_status?: string
+          phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          checkout_request_id: string | null
+          created_at: string
+          enrollment_id: string | null
+          id: string
+          merchant_request_id: string | null
+          mpesa_receipt: string | null
+          phone: string
+          raw_callback: Json | null
+          result_code: number | null
+          result_desc: string | null
+          status: string
+        }
+        Insert: {
+          amount: number
+          checkout_request_id?: string | null
+          created_at?: string
+          enrollment_id?: string | null
+          id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          phone: string
+          raw_callback?: Json | null
+          result_code?: number | null
+          result_desc?: string | null
+          status?: string
+        }
+        Update: {
+          amount?: number
+          checkout_request_id?: string | null
+          created_at?: string
+          enrollment_id?: string | null
+          id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          phone?: string
+          raw_callback?: Json | null
+          result_code?: number | null
+          result_desc?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "enrollments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

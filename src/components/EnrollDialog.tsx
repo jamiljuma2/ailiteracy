@@ -112,6 +112,9 @@ export function EnrollDialog({ open, onOpenChange }: Props) {
                     <div>
                       <p className="font-medium text-foreground">Check your phone</p>
                       <p className="text-muted-foreground mt-1">We've sent an M-Pesa prompt. Enter your PIN to complete payment.</p>
+                      {txRef && (
+                        <p className="text-xs text-muted-foreground/70 mt-2 font-mono">Ref: {txRef}</p>
+                      )}
                     </div>
                   </div>
                 </div>

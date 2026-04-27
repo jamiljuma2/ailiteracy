@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicLipanaWebhookRouteImport } from './routes/api/public/lipana-webhook'
+import { Route as ApiLipanaStkPushRouteImport } from './routes/api/lipana/stk-push'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicLipanaWebhookRoute = ApiPublicLipanaWebhookRouteImport.update({
+  id: '/api/public/lipana-webhook',
+  path: '/api/public/lipana-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLipanaStkPushRoute = ApiLipanaStkPushRouteImport.update({
+  id: '/api/lipana/stk-push',
+  path: '/api/lipana/stk-push',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/lipana/stk-push': typeof ApiLipanaStkPushRoute
+  '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/lipana/stk-push': typeof ApiLipanaStkPushRoute
+  '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/lipana/stk-push': typeof ApiLipanaStkPushRoute
+  '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/api/lipana/stk-push' | '/api/public/lipana-webhook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/api/lipana/stk-push' | '/api/public/lipana-webhook'
+  id: '__root__' | '/' | '/api/lipana/stk-push' | '/api/public/lipana-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiLipanaStkPushRoute: typeof ApiLipanaStkPushRoute
+  ApiPublicLipanaWebhookRoute: typeof ApiPublicLipanaWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/lipana-webhook': {
+      id: '/api/public/lipana-webhook'
+      path: '/api/public/lipana-webhook'
+      fullPath: '/api/public/lipana-webhook'
+      preLoaderRoute: typeof ApiPublicLipanaWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/lipana/stk-push': {
+      id: '/api/lipana/stk-push'
+      path: '/api/lipana/stk-push'
+      fullPath: '/api/lipana/stk-push'
+      preLoaderRoute: typeof ApiLipanaStkPushRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiLipanaStkPushRoute: ApiLipanaStkPushRoute,
+  ApiPublicLipanaWebhookRoute: ApiPublicLipanaWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

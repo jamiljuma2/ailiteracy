@@ -30,7 +30,7 @@ export function EnrollDialog({ open, onOpenChange }: Props) {
 
     setStatus("sending");
     try {
-      const res = await fetch("/api/lipana/stk-push", {
+      const res = await fetch("/api/public/lipana/stk-push", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

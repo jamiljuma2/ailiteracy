@@ -16,6 +16,7 @@ export function EnrollDialog({ open, onOpenChange }: Props) {
   const [status, setStatus] = useState<Status>("idle");
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [error, setError] = useState<string | null>(null);
+  const [txRef, setTxRef] = useState<string | null>(null);
 
   const validatePhone = (p: string) => /^(?:\+?254|0)?7\d{8}$/.test(p.replace(/\s/g, ""));
 
@@ -28,17 +29,34 @@ export function EnrollDialog({ open, onOpenChange }: Props) {
     if (!validatePhone(form.phone)) return setError("Enter a valid Safaricom number (e.g. 0712 345 678)");
 
     setStatus("sending");
-    // Simulated STK push flow — wire to /api/mpesa/stk-push when backend is ready
-    await new Promise((r) => setTimeout(r, 1200));
-    setStatus("pending");
-    await new Promise((r) => setTimeout(r, 2500));
-    setStatus("success");
+    try {
+      const res = await fetch("/api/lipana/stk-push", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setStatus("idle");
+        return setError(json?.error || "Could not initiate payment. Please try again.");
+      }
+      setTxRef(json.transactionId || json.checkoutRequestID || null);
+      setStatus("pending");
+    } catch (err) {
+      setStatus("idle");
+      setError("Network error. Please check your connection and retry.");
+    }
   };
 
   const reset = () => {
     setStatus("idle");
     setForm({ name: "", email: "", phone: "" });
     setError(null);
+    setTxRef(null);
   };
 
   return (

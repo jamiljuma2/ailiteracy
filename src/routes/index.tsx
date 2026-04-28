@@ -250,7 +250,8 @@ function Landing() {
           </div>
           <div className="flex items-center gap-6">
             <a href="mailto:hello@aiskills.africa" className="hover:text-foreground transition-colors flex items-center gap-1.5">
-              <MessageSquare className="h-3.5 w-3.5" /> hello@aiskills.africa
+              <MessageSquare className="h-3.5 w-3.5" />
+              <span>hello@aiskills.africa</span>
             </a>
           </div>
         </div>

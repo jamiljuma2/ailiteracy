@@ -2,7 +2,8 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Loader2, Mail, CheckCircle2, XCircle, LogOut } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Loader2, Mail, CheckCircle2, XCircle, LogOut, Eye } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
@@ -16,7 +17,39 @@ interface Enrollment {
   amount: number;
   payment_status: string;
   mpesa_receipt: string | null;
+  checkout_request_id: string | null;
+  merchant_request_id: string | null;
+  failure_reason: string | null;
   created_at: string;
+  updated_at: string;
+}
+
+interface Payment {
+  id: string;
+  status: string;
+  amount: number;
+  phone: string;
+  checkout_request_id: string | null;
+  merchant_request_id: string | null;
+  mpesa_receipt: string | null;
+  result_code: number | null;
+  result_desc: string | null;
+  created_at: string;
+}
+
+function statusBadge(status: string) {
+  const map: Record<string, string> = {
+    success: "bg-success/15 text-success",
+    failed: "bg-destructive/15 text-destructive",
+    pending: "bg-muted text-muted-foreground",
+    initiated: "bg-primary/15 text-primary",
+  };
+  return `text-xs px-2 py-1 rounded-full ${map[status] ?? "bg-muted text-muted-foreground"}`;
+}
+
+function fmt(ts: string | null) {
+  if (!ts) return "—";
+  return new Date(ts).toLocaleString();
 }
 
 function AdminDashboard() {
@@ -26,6 +59,9 @@ function AdminDashboard() {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [resending, setResending] = useState<string | null>(null);
   const [toast, setToast] = useState<{ id: string; ok: boolean; msg: string } | null>(null);
+  const [detailsFor, setDetailsFor] = useState<Enrollment | null>(null);
+  const [payments, setPayments] = useState<Payment[] | null>(null);
+  const [loadingPayments, setLoadingPayments] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -38,12 +74,25 @@ function AdminDashboard() {
       setAuthorized(true);
       const { data } = await supabase
         .from("enrollments")
-        .select("id, full_name, email, phone, amount, payment_status, mpesa_receipt, created_at")
+        .select("id, full_name, email, phone, amount, payment_status, mpesa_receipt, checkout_request_id, merchant_request_id, failure_reason, created_at, updated_at")
         .order("created_at", { ascending: false });
       setEnrollments((data as Enrollment[]) ?? []);
       setLoading(false);
     })();
   }, [navigate]);
+
+  const openDetails = async (enrollment: Enrollment) => {
+    setDetailsFor(enrollment);
+    setPayments(null);
+    setLoadingPayments(true);
+    const { data } = await supabase
+      .from("payments")
+      .select("id, status, amount, phone, checkout_request_id, merchant_request_id, mpesa_receipt, result_code, result_desc, created_at")
+      .eq("enrollment_id", enrollment.id)
+      .order("created_at", { ascending: false });
+    setPayments((data as Payment[]) ?? []);
+    setLoadingPayments(false);
+  };
 
   const resend = async (id: string) => {
     setResending(id);
@@ -51,10 +100,7 @@ function AdminDashboard() {
     const { data: { session } } = await supabase.auth.getSession();
     const res = await fetch("/api/admin/resend-meet-email", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session?.access_token}`,
-      },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${session?.access_token}` },
       body: JSON.stringify({ enrollmentId: id }),
     });
     const json = await res.json().catch(() => ({}));
@@ -103,7 +149,7 @@ function AdminDashboard() {
                 <th className="px-4 py-3 font-medium">Phone</th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 font-medium">Receipt</th>
-                <th className="px-4 py-3 font-medium text-right">Action</th>
+                <th className="px-4 py-3 font-medium text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -112,13 +158,7 @@ function AdminDashboard() {
                   <td className="px-4 py-3">{e.full_name}</td>
                   <td className="px-4 py-3 text-muted-foreground">{e.email}</td>
                   <td className="px-4 py-3 text-muted-foreground font-mono text-xs">{e.phone}</td>
-                  <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      e.payment_status === "success" ? "bg-success/15 text-success" :
-                      e.payment_status === "failed" ? "bg-destructive/15 text-destructive" :
-                      "bg-muted text-muted-foreground"
-                    }`}>{e.payment_status}</span>
-                  </td>
+                  <td className="px-4 py-3"><span className={statusBadge(e.payment_status)}>{e.payment_status}</span></td>
                   <td className="px-4 py-3 font-mono text-xs">{e.mpesa_receipt || "—"}</td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-2">
@@ -128,9 +168,11 @@ function AdminDashboard() {
                           {toast.msg}
                         </span>
                       )}
+                      <Button size="sm" variant="outline" onClick={() => openDetails(e)}>
+                        <Eye className="h-3 w-3 mr-1" /> Details
+                      </Button>
                       <Button
-                        size="sm"
-                        variant="outline"
+                        size="sm" variant="outline"
                         disabled={resending === e.id || e.payment_status !== "success"}
                         onClick={() => resend(e.id)}
                         title={e.payment_status !== "success" ? "Only available for paid enrollments" : "Resend Google Meet email"}
@@ -150,6 +192,72 @@ function AdminDashboard() {
           </table>
         </div>
       </div>
+
+      <Dialog open={!!detailsFor} onOpenChange={(o) => { if (!o) { setDetailsFor(null); setPayments(null); } }}>
+        <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto">
+          {detailsFor && (
+            <>
+              <DialogHeader>
+                <DialogTitle>Payment details</DialogTitle>
+                <DialogDescription>
+                  {detailsFor.full_name} · {detailsFor.email}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-5 mt-2">
+                <section className="rounded-lg border border-border/60 p-4 space-y-2 text-sm">
+                  <h3 className="font-semibold text-foreground mb-2">Enrollment</h3>
+                  <Row label="Status"><span className={statusBadge(detailsFor.payment_status)}>{detailsFor.payment_status}</span></Row>
+                  <Row label="Phone"><span className="font-mono">{detailsFor.phone}</span></Row>
+                  <Row label="Amount">KES {detailsFor.amount.toLocaleString()}</Row>
+                  <Row label="M-Pesa receipt"><span className="font-mono">{detailsFor.mpesa_receipt || "—"}</span></Row>
+                  <Row label="Checkout request ID"><span className="font-mono text-xs break-all">{detailsFor.checkout_request_id || "—"}</span></Row>
+                  <Row label="Merchant request ID"><span className="font-mono text-xs break-all">{detailsFor.merchant_request_id || "—"}</span></Row>
+                  {detailsFor.failure_reason && (
+                    <Row label="Failure reason"><span className="text-destructive">{detailsFor.failure_reason}</span></Row>
+                  )}
+                  <Row label="Created">{fmt(detailsFor.created_at)}</Row>
+                  <Row label="Updated">{fmt(detailsFor.updated_at)}</Row>
+                </section>
+
+                <section className="rounded-lg border border-border/60 p-4">
+                  <h3 className="font-semibold text-foreground mb-3 text-sm">Transactions ({payments?.length ?? 0})</h3>
+                  {loadingPayments ? (
+                    <div className="flex items-center justify-center py-6"><Loader2 className="h-4 w-4 animate-spin" /></div>
+                  ) : payments && payments.length > 0 ? (
+                    <div className="space-y-3">
+                      {payments.map((p) => (
+                        <div key={p.id} className="rounded-md border border-border/40 p-3 text-sm space-y-1.5">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className={statusBadge(p.status)}>{p.status}</span>
+                            <span className="text-xs text-muted-foreground">{fmt(p.created_at)}</span>
+                          </div>
+                          <Row label="Transaction ID"><span className="font-mono text-xs break-all">{p.merchant_request_id || p.checkout_request_id || "—"}</span></Row>
+                          <Row label="Phone"><span className="font-mono text-xs">{p.phone}</span></Row>
+                          <Row label="Amount">KES {p.amount.toLocaleString()}</Row>
+                          {p.mpesa_receipt && <Row label="Receipt"><span className="font-mono text-xs">{p.mpesa_receipt}</span></Row>}
+                          {p.result_desc && <Row label="Result">{p.result_desc}</Row>}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground text-center py-4">No transactions recorded.</p>
+                  )}
+                </section>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+function Row({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex items-start justify-between gap-4">
+      <span className="text-muted-foreground text-xs uppercase tracking-wide flex-shrink-0">{label}</span>
+      <span className="text-right">{children}</span>
     </div>
   );
 }

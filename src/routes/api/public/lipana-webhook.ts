@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createHmac, timingSafeEqual } from "crypto";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { sendMeetEmail } from "@/server/send-meet-email.server";
 
 /**
  * Lipana webhook receiver.
@@ -66,6 +67,16 @@ export const Route = createFileRoute("/api/public/lipana-webhook")({
               failure_reason: newStatus === "failed" ? data.message ?? data.status ?? "Payment failed" : null,
             })
             .eq("id", enrollment.id);
+        }
+
+        // Send Meet email on first successful payment
+        if (enrollment && newStatus === "success" && enrollment.payment_status !== "success") {
+          await sendMeetEmail({
+            enrollmentId: enrollment.id,
+            recipientEmail: enrollment.email,
+            recipientName: enrollment.full_name,
+            triggerSource: "webhook",
+          });
         }
 
         await supabaseAdmin.from("payments").insert({

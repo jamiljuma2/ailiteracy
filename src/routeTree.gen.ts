@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as ApiPublicLipanaWebhookRouteImport } from './routes/api/public/lipana-webhook'
 import { Route as ApiAdminResendMeetEmailRouteImport } from './routes/api/admin/resend-meet-email'
 import { Route as ApiPublicLipanaStkPushRouteImport } from './routes/api/public/lipana/stk-push'
@@ -17,6 +19,16 @@ import { Route as ApiPublicLipanaStkPushRouteImport } from './routes/api/public/
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicLipanaWebhookRoute = ApiPublicLipanaWebhookRouteImport.update({
@@ -37,12 +49,16 @@ const ApiPublicLipanaStkPushRoute = ApiPublicLipanaStkPushRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
   '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin': typeof AdminIndexRoute
   '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
   '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
@@ -50,6 +66,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
   '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
@@ -58,18 +76,24 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin/login'
+    | '/admin/'
     | '/api/admin/resend-meet-email'
     | '/api/public/lipana-webhook'
     | '/api/public/lipana/stk-push'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin/login'
+    | '/admin'
     | '/api/admin/resend-meet-email'
     | '/api/public/lipana-webhook'
     | '/api/public/lipana/stk-push'
   id:
     | '__root__'
     | '/'
+    | '/admin/login'
+    | '/admin/'
     | '/api/admin/resend-meet-email'
     | '/api/public/lipana-webhook'
     | '/api/public/lipana/stk-push'
@@ -77,6 +101,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   ApiAdminResendMeetEmailRoute: typeof ApiAdminResendMeetEmailRoute
   ApiPublicLipanaWebhookRoute: typeof ApiPublicLipanaWebhookRoute
   ApiPublicLipanaStkPushRoute: typeof ApiPublicLipanaStkPushRoute
@@ -89,6 +115,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/lipana-webhook': {
@@ -117,6 +157,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminIndexRoute: AdminIndexRoute,
   ApiAdminResendMeetEmailRoute: ApiAdminResendMeetEmailRoute,
   ApiPublicLipanaWebhookRoute: ApiPublicLipanaWebhookRoute,
   ApiPublicLipanaStkPushRoute: ApiPublicLipanaStkPushRoute,

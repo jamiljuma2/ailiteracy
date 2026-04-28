@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicLipanaWebhookRouteImport } from './routes/api/public/lipana-webhook'
+import { Route as ApiAdminResendMeetEmailRouteImport } from './routes/api/admin/resend-meet-email'
 import { Route as ApiPublicLipanaStkPushRouteImport } from './routes/api/public/lipana/stk-push'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const ApiPublicLipanaWebhookRoute = ApiPublicLipanaWebhookRouteImport.update({
   path: '/api/public/lipana-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminResendMeetEmailRoute = ApiAdminResendMeetEmailRouteImport.update({
+  id: '/api/admin/resend-meet-email',
+  path: '/api/admin/resend-meet-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicLipanaStkPushRoute = ApiPublicLipanaStkPushRouteImport.update({
   id: '/api/public/lipana/stk-push',
   path: '/api/public/lipana/stk-push',
@@ -31,34 +37,47 @@ const ApiPublicLipanaStkPushRoute = ApiPublicLipanaStkPushRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
   '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
   '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
   '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/public/lipana-webhook' | '/api/public/lipana/stk-push'
+  fullPaths:
+    | '/'
+    | '/api/admin/resend-meet-email'
+    | '/api/public/lipana-webhook'
+    | '/api/public/lipana/stk-push'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/public/lipana-webhook' | '/api/public/lipana/stk-push'
+  to:
+    | '/'
+    | '/api/admin/resend-meet-email'
+    | '/api/public/lipana-webhook'
+    | '/api/public/lipana/stk-push'
   id:
     | '__root__'
     | '/'
+    | '/api/admin/resend-meet-email'
     | '/api/public/lipana-webhook'
     | '/api/public/lipana/stk-push'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiAdminResendMeetEmailRoute: typeof ApiAdminResendMeetEmailRoute
   ApiPublicLipanaWebhookRoute: typeof ApiPublicLipanaWebhookRoute
   ApiPublicLipanaStkPushRoute: typeof ApiPublicLipanaStkPushRoute
 }
@@ -79,6 +98,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicLipanaWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/resend-meet-email': {
+      id: '/api/admin/resend-meet-email'
+      path: '/api/admin/resend-meet-email'
+      fullPath: '/api/admin/resend-meet-email'
+      preLoaderRoute: typeof ApiAdminResendMeetEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/lipana/stk-push': {
       id: '/api/public/lipana/stk-push'
       path: '/api/public/lipana/stk-push'
@@ -91,6 +117,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiAdminResendMeetEmailRoute: ApiAdminResendMeetEmailRoute,
   ApiPublicLipanaWebhookRoute: ApiPublicLipanaWebhookRoute,
   ApiPublicLipanaStkPushRoute: ApiPublicLipanaStkPushRoute,
 }

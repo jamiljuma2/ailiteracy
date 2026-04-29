@@ -19,6 +19,7 @@ export type Database = {
           certificate_code: string
           course_title: string
           created_at: string
+          download_token: string | null
           email_error: string | null
           email_status: string
           enrollment_id: string
@@ -27,11 +28,14 @@ export type Database = {
           issued_by: string | null
           recipient_email: string
           recipient_name: string
+          storage_path: string | null
+          token_expires_at: string | null
         }
         Insert: {
           certificate_code: string
           course_title?: string
           created_at?: string
+          download_token?: string | null
           email_error?: string | null
           email_status?: string
           enrollment_id: string
@@ -40,11 +44,14 @@ export type Database = {
           issued_by?: string | null
           recipient_email: string
           recipient_name: string
+          storage_path?: string | null
+          token_expires_at?: string | null
         }
         Update: {
           certificate_code?: string
           course_title?: string
           created_at?: string
+          download_token?: string | null
           email_error?: string | null
           email_status?: string
           enrollment_id?: string
@@ -53,6 +60,8 @@ export type Database = {
           issued_by?: string | null
           recipient_email?: string
           recipient_name?: string
+          storage_path?: string | null
+          token_expires_at?: string | null
         }
         Relationships: [
           {

@@ -5,6 +5,8 @@ interface SendArgs {
   courseTitle: string;
   certificateCode: string;
   pdfBytes: Uint8Array;
+  downloadUrl: string;
+  expiresAt: Date;
 }
 
 export async function sendCertificateEmail({
@@ -13,6 +15,8 @@ export async function sendCertificateEmail({
   courseTitle,
   certificateCode,
   pdfBytes,
+  downloadUrl,
+  expiresAt,
 }: SendArgs): Promise<{ ok: boolean; error?: string }> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return { ok: false, error: "RESEND_API_KEY not configured" };
@@ -25,6 +29,12 @@ export async function sendCertificateEmail({
   }
   const base64 = btoa(binary);
 
+  const expiryText = expiresAt.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   const subject = `Your certificate for ${courseTitle}`;
   const html = `
     <div style="font-family:Inter,Arial,sans-serif;background:#fff;padding:24px;color:#111;">
@@ -32,7 +42,18 @@ export async function sendCertificateEmail({
         <h1 style="font-size:22px;margin:0 0 16px;">Congratulations, ${escapeHtml(recipientName)}! 🎉</h1>
         <p style="font-size:15px;line-height:1.6;color:#333;">
           You've successfully completed <strong>${escapeHtml(courseTitle)}</strong>.
-          Your certificate of completion is attached to this email as a PDF.
+          Your certificate of completion is attached as a PDF.
+        </p>
+        <p style="margin:24px 0;">
+          <a href="${downloadUrl}" style="background:#6366f1;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block;">
+            Download certificate
+          </a>
+        </p>
+        <p style="font-size:13px;color:#666;word-break:break-all;">
+          Or copy this link: <a href="${downloadUrl}" style="color:#6366f1;">${downloadUrl}</a>
+        </p>
+        <p style="font-size:13px;color:#888;margin-top:8px;">
+          This download link is available until <strong>${expiryText}</strong>.
         </p>
         <p style="font-size:14px;color:#555;margin-top:16px;">
           Certificate ID: <strong style="font-family:monospace;">${escapeHtml(certificateCode)}</strong>

@@ -16,6 +16,7 @@ import { Route as ApiPublicLipanaWebhookRouteImport } from './routes/api/public/
 import { Route as ApiAdminResendMeetEmailRouteImport } from './routes/api/admin/resend-meet-email'
 import { Route as ApiAdminIssueCertificateRouteImport } from './routes/api/admin/issue-certificate'
 import { Route as ApiPublicLipanaStkPushRouteImport } from './routes/api/public/lipana/stk-push'
+import { Route as ApiPublicCertificateTokenRouteImport } from './routes/api/public/certificate.$token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -53,6 +54,12 @@ const ApiPublicLipanaStkPushRoute = ApiPublicLipanaStkPushRouteImport.update({
   path: '/api/public/lipana/stk-push',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCertificateTokenRoute =
+  ApiPublicCertificateTokenRouteImport.update({
+    id: '/api/public/certificate/$token',
+    path: '/api/public/certificate/$token',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +68,7 @@ export interface FileRoutesByFullPath {
   '/api/admin/issue-certificate': typeof ApiAdminIssueCertificateRoute
   '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
+  '/api/public/certificate/$token': typeof ApiPublicCertificateTokenRoute
   '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
 }
 export interface FileRoutesByTo {
@@ -70,6 +78,7 @@ export interface FileRoutesByTo {
   '/api/admin/issue-certificate': typeof ApiAdminIssueCertificateRoute
   '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
+  '/api/public/certificate/$token': typeof ApiPublicCertificateTokenRoute
   '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
 }
 export interface FileRoutesById {
@@ -80,6 +89,7 @@ export interface FileRoutesById {
   '/api/admin/issue-certificate': typeof ApiAdminIssueCertificateRoute
   '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
+  '/api/public/certificate/$token': typeof ApiPublicCertificateTokenRoute
   '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
 }
 export interface FileRouteTypes {
@@ -91,6 +101,7 @@ export interface FileRouteTypes {
     | '/api/admin/issue-certificate'
     | '/api/admin/resend-meet-email'
     | '/api/public/lipana-webhook'
+    | '/api/public/certificate/$token'
     | '/api/public/lipana/stk-push'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -100,6 +111,7 @@ export interface FileRouteTypes {
     | '/api/admin/issue-certificate'
     | '/api/admin/resend-meet-email'
     | '/api/public/lipana-webhook'
+    | '/api/public/certificate/$token'
     | '/api/public/lipana/stk-push'
   id:
     | '__root__'
@@ -109,6 +121,7 @@ export interface FileRouteTypes {
     | '/api/admin/issue-certificate'
     | '/api/admin/resend-meet-email'
     | '/api/public/lipana-webhook'
+    | '/api/public/certificate/$token'
     | '/api/public/lipana/stk-push'
   fileRoutesById: FileRoutesById
 }
@@ -119,6 +132,7 @@ export interface RootRouteChildren {
   ApiAdminIssueCertificateRoute: typeof ApiAdminIssueCertificateRoute
   ApiAdminResendMeetEmailRoute: typeof ApiAdminResendMeetEmailRoute
   ApiPublicLipanaWebhookRoute: typeof ApiPublicLipanaWebhookRoute
+  ApiPublicCertificateTokenRoute: typeof ApiPublicCertificateTokenRoute
   ApiPublicLipanaStkPushRoute: typeof ApiPublicLipanaStkPushRoute
 }
 
@@ -173,6 +187,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicLipanaStkPushRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/certificate/$token': {
+      id: '/api/public/certificate/$token'
+      path: '/api/public/certificate/$token'
+      fullPath: '/api/public/certificate/$token'
+      preLoaderRoute: typeof ApiPublicCertificateTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +204,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAdminIssueCertificateRoute: ApiAdminIssueCertificateRoute,
   ApiAdminResendMeetEmailRoute: ApiAdminResendMeetEmailRoute,
   ApiPublicLipanaWebhookRoute: ApiPublicLipanaWebhookRoute,
+  ApiPublicCertificateTokenRoute: ApiPublicCertificateTokenRoute,
   ApiPublicLipanaStkPushRoute: ApiPublicLipanaStkPushRoute,
 }
 export const routeTree = rootRouteImport

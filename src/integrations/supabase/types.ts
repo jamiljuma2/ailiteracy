@@ -14,6 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
+      certificates: {
+        Row: {
+          certificate_code: string
+          course_title: string
+          created_at: string
+          email_error: string | null
+          email_status: string
+          enrollment_id: string
+          id: string
+          issued_at: string
+          issued_by: string | null
+          recipient_email: string
+          recipient_name: string
+        }
+        Insert: {
+          certificate_code: string
+          course_title?: string
+          created_at?: string
+          email_error?: string | null
+          email_status?: string
+          enrollment_id: string
+          id?: string
+          issued_at?: string
+          issued_by?: string | null
+          recipient_email: string
+          recipient_name: string
+        }
+        Update: {
+          certificate_code?: string
+          course_title?: string
+          created_at?: string
+          email_error?: string | null
+          email_status?: string
+          enrollment_id?: string
+          id?: string
+          issued_at?: string
+          issued_by?: string | null
+          recipient_email?: string
+          recipient_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificates_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "enrollments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       enrollment_emails: {
         Row: {
           created_at: string
@@ -59,7 +109,9 @@ export type Database = {
         Row: {
           amount: number
           checkout_request_id: string | null
+          completed_at: string | null
           course_access: boolean
+          course_completed: boolean
           created_at: string
           email: string
           failure_reason: string | null
@@ -74,7 +126,9 @@ export type Database = {
         Insert: {
           amount?: number
           checkout_request_id?: string | null
+          completed_at?: string | null
           course_access?: boolean
+          course_completed?: boolean
           created_at?: string
           email: string
           failure_reason?: string | null
@@ -89,7 +143,9 @@ export type Database = {
         Update: {
           amount?: number
           checkout_request_id?: string | null
+          completed_at?: string | null
           course_access?: boolean
+          course_completed?: boolean
           created_at?: string
           email?: string
           failure_reason?: string | null

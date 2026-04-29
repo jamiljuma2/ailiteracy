@@ -14,6 +14,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as ApiPublicLipanaWebhookRouteImport } from './routes/api/public/lipana-webhook'
 import { Route as ApiAdminResendMeetEmailRouteImport } from './routes/api/admin/resend-meet-email'
+import { Route as ApiAdminIssueCertificateRouteImport } from './routes/api/admin/issue-certificate'
 import { Route as ApiPublicLipanaStkPushRouteImport } from './routes/api/public/lipana/stk-push'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,12 @@ const ApiAdminResendMeetEmailRoute = ApiAdminResendMeetEmailRouteImport.update({
   path: '/api/admin/resend-meet-email',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminIssueCertificateRoute =
+  ApiAdminIssueCertificateRouteImport.update({
+    id: '/api/admin/issue-certificate',
+    path: '/api/admin/issue-certificate',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicLipanaStkPushRoute = ApiPublicLipanaStkPushRouteImport.update({
   id: '/api/public/lipana/stk-push',
   path: '/api/public/lipana/stk-push',
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/admin/issue-certificate': typeof ApiAdminIssueCertificateRoute
   '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
   '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
@@ -59,6 +67,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin': typeof AdminIndexRoute
+  '/api/admin/issue-certificate': typeof ApiAdminIssueCertificateRoute
   '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
   '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
@@ -68,6 +77,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/admin/issue-certificate': typeof ApiAdminIssueCertificateRoute
   '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
   '/api/public/lipana-webhook': typeof ApiPublicLipanaWebhookRoute
   '/api/public/lipana/stk-push': typeof ApiPublicLipanaStkPushRoute
@@ -78,6 +88,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/login'
     | '/admin/'
+    | '/api/admin/issue-certificate'
     | '/api/admin/resend-meet-email'
     | '/api/public/lipana-webhook'
     | '/api/public/lipana/stk-push'
@@ -86,6 +97,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/login'
     | '/admin'
+    | '/api/admin/issue-certificate'
     | '/api/admin/resend-meet-email'
     | '/api/public/lipana-webhook'
     | '/api/public/lipana/stk-push'
@@ -94,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/login'
     | '/admin/'
+    | '/api/admin/issue-certificate'
     | '/api/admin/resend-meet-email'
     | '/api/public/lipana-webhook'
     | '/api/public/lipana/stk-push'
@@ -103,6 +116,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  ApiAdminIssueCertificateRoute: typeof ApiAdminIssueCertificateRoute
   ApiAdminResendMeetEmailRoute: typeof ApiAdminResendMeetEmailRoute
   ApiPublicLipanaWebhookRoute: typeof ApiPublicLipanaWebhookRoute
   ApiPublicLipanaStkPushRoute: typeof ApiPublicLipanaStkPushRoute
@@ -145,6 +159,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminResendMeetEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/issue-certificate': {
+      id: '/api/admin/issue-certificate'
+      path: '/api/admin/issue-certificate'
+      fullPath: '/api/admin/issue-certificate'
+      preLoaderRoute: typeof ApiAdminIssueCertificateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/lipana/stk-push': {
       id: '/api/public/lipana/stk-push'
       path: '/api/public/lipana/stk-push'
@@ -159,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminIndexRoute: AdminIndexRoute,
+  ApiAdminIssueCertificateRoute: ApiAdminIssueCertificateRoute,
   ApiAdminResendMeetEmailRoute: ApiAdminResendMeetEmailRoute,
   ApiPublicLipanaWebhookRoute: ApiPublicLipanaWebhookRoute,
   ApiPublicLipanaStkPushRoute: ApiPublicLipanaStkPushRoute,
@@ -166,12 +188,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

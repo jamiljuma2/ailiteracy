@@ -15,7 +15,6 @@ import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as ApiPublicLipanaWebhookRouteImport } from './routes/api/public/lipana-webhook'
 import { Route as ApiAdminResendMeetEmailRouteImport } from './routes/api/admin/resend-meet-email'
 import { Route as ApiAdminIssueCertificateRouteImport } from './routes/api/admin/issue-certificate'
-import { Route as ApiAdminIssueCertificateRouteImport } from './routes/api/admin/issue-certificate'
 import { Route as ApiPublicLipanaStkPushRouteImport } from './routes/api/public/lipana/stk-push'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,11 +40,6 @@ const ApiPublicLipanaWebhookRoute = ApiPublicLipanaWebhookRouteImport.update({
 const ApiAdminResendMeetEmailRoute = ApiAdminResendMeetEmailRouteImport.update({
   id: '/api/admin/resend-meet-email',
   path: '/api/admin/resend-meet-email',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAdminIssueCertificateRoute = ApiAdminIssueCertificateRouteImport.update({
-  id: '/api/admin/issue-certificate',
-  path: '/api/admin/issue-certificate',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAdminIssueCertificateRoute =
@@ -163,13 +157,6 @@ declare module '@tanstack/react-router' {
       path: '/api/admin/resend-meet-email'
       fullPath: '/api/admin/resend-meet-email'
       preLoaderRoute: typeof ApiAdminResendMeetEmailRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/admin/issue-certificate': {
-      id: '/api/admin/issue-certificate'
-      path: '/api/admin/issue-certificate'
-      fullPath: '/api/admin/issue-certificate'
-      preLoaderRoute: typeof ApiAdminIssueCertificateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/admin/issue-certificate': {

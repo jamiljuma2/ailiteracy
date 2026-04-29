@@ -59,6 +59,7 @@ export const Route = createFileRoute("/api/admin/issue-certificate")({
         const courseTitle = "AI for Beginners";
         const certificateCode = generateCertificateCode();
         const issuedAt = new Date();
+        const expiresAt = new Date(issuedAt.getTime() + 90 * 24 * 60 * 60 * 1000); // 90 days
 
         const pdfBytes = await generateCertificatePdf({
           recipientName: enrollment.full_name,
@@ -67,12 +68,40 @@ export const Route = createFileRoute("/api/admin/issue-certificate")({
           issuedAt,
         });
 
+        // Upload PDF to private storage bucket
+        const storagePath = `${enrollment.id}/${certificateCode}.pdf`;
+        const { error: uploadErr } = await supabaseAdmin.storage
+          .from("certificates")
+          .upload(storagePath, pdfBytes, {
+            contentType: "application/pdf",
+            upsert: true,
+          });
+        if (uploadErr) {
+          return Response.json(
+            { error: `Failed to store certificate: ${uploadErr.message}` },
+            { status: 500 },
+          );
+        }
+
+        // Generate a strong random download token
+        const tokenBytes = new Uint8Array(32);
+        crypto.getRandomValues(tokenBytes);
+        const downloadToken = Array.from(tokenBytes)
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
+
+        // Build absolute download URL using the request origin
+        const origin = new URL(request.url).origin;
+        const downloadUrl = `${origin}/api/public/certificate/${downloadToken}`;
+
         const sendResult = await sendCertificateEmail({
           recipientEmail: enrollment.email,
           recipientName: enrollment.full_name,
           courseTitle,
           certificateCode,
           pdfBytes,
+          downloadUrl,
+          expiresAt,
         });
 
         // Record certificate
@@ -86,6 +115,9 @@ export const Route = createFileRoute("/api/admin/issue-certificate")({
           issued_by: userId,
           email_status: sendResult.ok ? "sent" : "failed",
           email_error: sendResult.ok ? null : sendResult.error,
+          storage_path: storagePath,
+          download_token: downloadToken,
+          token_expires_at: expiresAt.toISOString(),
         });
 
         // Mark enrollment completed on first successful issuance

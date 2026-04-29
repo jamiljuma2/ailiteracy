@@ -15,6 +15,7 @@ import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as ApiPublicLipanaWebhookRouteImport } from './routes/api/public/lipana-webhook'
 import { Route as ApiAdminResendMeetEmailRouteImport } from './routes/api/admin/resend-meet-email'
 import { Route as ApiAdminIssueCertificateRouteImport } from './routes/api/admin/issue-certificate'
+import { Route as ApiAdminIssueCertificateRouteImport } from './routes/api/admin/issue-certificate'
 import { Route as ApiPublicLipanaStkPushRouteImport } from './routes/api/public/lipana/stk-push'
 
 const IndexRoute = IndexRouteImport.update({
@@ -40,6 +41,11 @@ const ApiPublicLipanaWebhookRoute = ApiPublicLipanaWebhookRouteImport.update({
 const ApiAdminResendMeetEmailRoute = ApiAdminResendMeetEmailRouteImport.update({
   id: '/api/admin/resend-meet-email',
   path: '/api/admin/resend-meet-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminIssueCertificateRoute = ApiAdminIssueCertificateRouteImport.update({
+  id: '/api/admin/issue-certificate',
+  path: '/api/admin/issue-certificate',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAdminIssueCertificateRoute =
@@ -166,6 +172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminIssueCertificateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/issue-certificate': {
+      id: '/api/admin/issue-certificate'
+      path: '/api/admin/issue-certificate'
+      fullPath: '/api/admin/issue-certificate'
+      preLoaderRoute: typeof ApiAdminIssueCertificateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/lipana/stk-push': {
       id: '/api/public/lipana/stk-push'
       path: '/api/public/lipana/stk-push'
@@ -188,12 +201,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

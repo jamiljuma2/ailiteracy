@@ -110,6 +110,25 @@ function AdminDashboard() {
     setTimeout(() => setToast(null), 4000);
   };
 
+  const issueCert = async (id: string) => {
+    setIssuing(id);
+    setToast(null);
+    const { data: { session } } = await supabase.auth.getSession();
+    const res = await fetch("/api/admin/issue-certificate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${session?.access_token}` },
+      body: JSON.stringify({ enrollmentId: id }),
+    });
+    const json = await res.json().catch(() => ({}));
+    setIssuing(null);
+    setToast({
+      id,
+      ok: res.ok,
+      msg: res.ok ? `Certificate sent (${json.certificateCode})` : (json.error || "Failed to issue"),
+    });
+    setTimeout(() => setToast(null), 5000);
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
     navigate({ to: "/admin/login" });

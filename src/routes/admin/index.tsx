@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Loader2, Mail, CheckCircle2, XCircle, LogOut, Eye } from "lucide-react";
+import { Loader2, Mail, CheckCircle2, XCircle, LogOut, Eye, Award } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
@@ -58,6 +58,7 @@ function AdminDashboard() {
   const [authorized, setAuthorized] = useState(false);
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [resending, setResending] = useState<string | null>(null);
+  const [issuing, setIssuing] = useState<string | null>(null);
   const [toast, setToast] = useState<{ id: string; ok: boolean; msg: string } | null>(null);
   const [detailsFor, setDetailsFor] = useState<Enrollment | null>(null);
   const [payments, setPayments] = useState<Payment[] | null>(null);
@@ -180,6 +181,16 @@ function AdminDashboard() {
                         {resending === e.id
                           ? <Loader2 className="h-3 w-3 animate-spin" />
                           : <><Mail className="h-3 w-3 mr-1" /> Resend</>}
+                      </Button>
+                      <Button
+                        size="sm"
+                        disabled={issuing === e.id || e.payment_status !== "success"}
+                        onClick={() => issueCert(e.id)}
+                        title={e.payment_status !== "success" ? "Only available for paid enrollments" : "Issue certificate of completion"}
+                      >
+                        {issuing === e.id
+                          ? <Loader2 className="h-3 w-3 animate-spin" />
+                          : <><Award className="h-3 w-3 mr-1" /> Issue cert</>}
                       </Button>
                     </div>
                   </td>

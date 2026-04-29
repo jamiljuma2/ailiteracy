@@ -59,9 +59,14 @@ function Landing() {
             <a href="#testimonials" className="hover:text-foreground transition-colors">Stories</a>
             <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
           </div>
-          <Button onClick={() => setEnrollOpen(true)} size="sm" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
-            Enroll
-          </Button>
+          <div className="flex items-center gap-2">
+            <Link to="/login" className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
+              Sign in
+            </Link>
+            <Button onClick={() => setEnrollOpen(true)} size="sm" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
+              Enroll
+            </Button>
+          </div>
         </nav>
       </header>
 

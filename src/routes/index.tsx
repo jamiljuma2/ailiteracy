@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { EnrollDialog } from "@/components/EnrollDialog";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Sparkles, Brain, Rocket, Users, CheckCircle2, Star, Calendar,
   MessageSquare, Briefcase, GraduationCap, ArrowRight, Zap, Award
@@ -42,6 +43,20 @@ const audiences = [
 
 function Landing() {
   const [enrollOpen, setEnrollOpen] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      setSignedIn(!!session);
+    });
+    supabase.auth.getSession().then(({ data }) => setSignedIn(!!data.session));
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+  };
+
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -60,9 +75,15 @@ function Landing() {
             <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
           </div>
           <div className="flex items-center gap-2">
-            <Link to="/login" className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
-              Sign in
-            </Link>
+            {signedIn ? (
+              <button onClick={handleSignOut} className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
+                Sign out
+              </button>
+            ) : (
+              <Link to="/login" className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
+                Sign in
+              </Link>
+            )}
             <Button onClick={() => setEnrollOpen(true)} size="sm" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
               Enroll
             </Button>

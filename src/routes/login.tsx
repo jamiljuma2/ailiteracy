@@ -29,7 +29,7 @@ function LoginPage() {
       const { data: role } = await supabase
         .from("user_roles").select("role")
         .eq("user_id", session.user.id).eq("role", "admin").maybeSingle();
-      navigate({ to: role ? "/admin" : "/" });
+      navigate({ to: role ? "/admin" : "/dashboard" });
     };
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       route(session);

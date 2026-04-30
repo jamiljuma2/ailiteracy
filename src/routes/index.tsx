@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { EnrollDialog } from "@/components/EnrollDialog";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Sparkles, Brain, Rocket, Users, CheckCircle2, Star, Calendar,
   MessageSquare, Briefcase, GraduationCap, ArrowRight, Zap, Award

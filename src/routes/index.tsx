@@ -91,9 +91,14 @@ function Landing() {
               </Link>
             )}
             {signedIn ? (
-              <button onClick={handleSignOut} className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
-                Sign out
-              </button>
+              <>
+                <Link to="/dashboard" className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
+                  My Dashboard
+                </Link>
+                <button onClick={handleSignOut} className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
+                  Sign out
+                </button>
+              </>
             ) : (
               <Link to="/login" className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
                 Sign in

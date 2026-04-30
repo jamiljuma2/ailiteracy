@@ -43,6 +43,20 @@ const audiences = [
 
 function Landing() {
   const [enrollOpen, setEnrollOpen] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      setSignedIn(!!session);
+    });
+    supabase.auth.getSession().then(({ data }) => setSignedIn(!!data.session));
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+  };
+
 
   return (
     <div className="min-h-screen bg-background text-foreground">

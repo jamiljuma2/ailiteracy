@@ -44,12 +44,22 @@ const audiences = [
 function Landing() {
   const [enrollOpen, setEnrollOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+    const checkAdmin = async (userId: string) => {
+      const { data } = await supabase
+        .from("user_roles").select("role")
+        .eq("user_id", userId).eq("role", "admin").maybeSingle();
+      setIsAdmin(!!data);
+    };
+    const sync = (session: { user: { id: string } } | null) => {
       setSignedIn(!!session);
-    });
-    supabase.auth.getSession().then(({ data }) => setSignedIn(!!data.session));
+      if (session) checkAdmin(session.user.id);
+      else setIsAdmin(false);
+    };
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => sync(session));
+    supabase.auth.getSession().then(({ data }) => sync(data.session));
     return () => subscription.unsubscribe();
   }, []);
 
@@ -75,6 +85,11 @@ function Landing() {
             <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
           </div>
           <div className="flex items-center gap-2">
+            {isAdmin && (
+              <Link to="/admin" className="hidden sm:inline-block text-sm text-primary hover:text-foreground transition-colors px-3 py-2">
+                Admin
+              </Link>
+            )}
             {signedIn ? (
               <button onClick={handleSignOut} className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
                 Sign out

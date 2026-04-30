@@ -24,12 +24,17 @@ function LoginPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const route = async (session: { user: { id: string } } | null) => {
+      if (!session) return;
+      const { data: role } = await supabase
+        .from("user_roles").select("role")
+        .eq("user_id", session.user.id).eq("role", "admin").maybeSingle();
+      navigate({ to: role ? "/admin" : "/" });
+    };
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) navigate({ to: "/" });
+      route(session);
     });
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/" });
-    });
+    supabase.auth.getSession().then(({ data }) => route(data.session));
     return () => subscription.unsubscribe();
   }, [navigate]);
 
@@ -40,7 +45,7 @@ function LoginPage() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) return setError(error.message);
-    navigate({ to: "/" });
+    // onAuthStateChange will handle the redirect (admin vs learner)
   };
 
   const handleGoogle = async () => {

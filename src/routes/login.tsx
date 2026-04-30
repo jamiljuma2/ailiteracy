@@ -45,7 +45,7 @@ function LoginPage() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) return setError(error.message);
-    navigate({ to: "/" });
+    // onAuthStateChange will handle the redirect (admin vs learner)
   };
 
   const handleGoogle = async () => {

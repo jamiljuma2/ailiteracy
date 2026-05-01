@@ -2,6 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { EnrollDialog } from "@/components/EnrollDialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Sparkles,
@@ -17,6 +23,8 @@ import {
   ArrowRight,
   Zap,
   Award,
+  Menu,
+  X,
 } from "lucide-react";
 import heroImg from "@/assets/hero-ai.jpg";
 
@@ -111,6 +119,7 @@ const audiences = [
 
 function Landing() {
   const [enrollOpen, setEnrollOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -163,37 +172,50 @@ function Landing() {
             </a>
           </div>
           <div className="flex items-center gap-2">
-            {isAdmin && (
-              <Link
-                to="/admin"
-                className="hidden sm:inline-block text-sm text-primary hover:text-foreground transition-colors px-3 py-2"
-              >
-                Admin
-              </Link>
-            )}
-            {signedIn ? (
-              <>
+            {/* Desktop nav */}
+            <div className="hidden sm:flex items-center gap-2">
+              {isAdmin && (
                 <Link
-                  to="/dashboard"
-                  className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
+                  to="/admin"
+                  className="text-sm text-primary hover:text-foreground transition-colors px-3 py-2"
                 >
-                  My Dashboard
+                  Admin
                 </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
+              )}
+              {signedIn ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
+                  >
+                    My Dashboard
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
                 >
-                  Sign out
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/login"
-                className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
-              >
-                Sign in
-              </Link>
-            )}
+                  Sign in
+                </Link>
+              )}
+            </div>
+            
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="md:hidden p-2 hover:bg-accent rounded-lg transition-colors"
+              aria-label="Open menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            
             <Button
               onClick={() => setEnrollOpen(true)}
               size="sm"
@@ -204,6 +226,76 @@ function Landing() {
           </div>
         </nav>
       </header>
+
+      {/* Mobile menu drawer */}
+      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+        <SheetContent side="right" className="w-64">
+          <SheetHeader>
+            <SheetTitle>Menu</SheetTitle>
+          </SheetHeader>
+          <div className="flex flex-col gap-4 mt-6">
+            <a
+              href="#modules"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+            >
+              Curriculum
+            </a>
+            <a
+              href="#testimonials"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+            >
+              Stories
+            </a>
+            <a
+              href="#pricing"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+            >
+              Pricing
+            </a>
+            <div className="border-t my-2" />
+            {isAdmin && (
+              <Link
+                to="/admin"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm text-primary hover:text-foreground transition-colors py-2"
+              >
+                Admin
+              </Link>
+            )}
+            {signedIn ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+                >
+                  My Dashboard
+                </Link>
+                <button
+                  onClick={() => {
+                    handleSignOut();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2 text-left"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+              >
+                Sign in
+              </Link>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* Hero */}
       <section className="relative overflow-hidden px-4 pt-28 pb-20 sm:px-6 sm:pt-36 sm:pb-24">

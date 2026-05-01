@@ -147,10 +147,10 @@ function Dashboard() {
 
   return (
     <AppSidebar variant="user" onSignOut={handleSignOut}>
-      <main className="min-h-screen bg-background text-foreground px-6 py-8">
+      <main className="min-h-screen bg-background px-4 py-6 text-foreground sm:px-6 sm:py-8">
         <div className="container mx-auto max-w-5xl">
           <div className="mb-10">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">My Dashboard</h1>
+            <h1 className="text-3xl md:text-5xl font-bold tracking-tight">My Dashboard</h1>
             <p className="mt-3 text-muted-foreground">
               Signed in as <span className="text-foreground font-medium">{email}</span>
             </p>

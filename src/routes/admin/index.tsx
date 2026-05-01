@@ -192,20 +192,20 @@ function AdminDashboard() {
 
   return (
     <AppSidebar variant="admin" onSignOut={signOut}>
-      <main className="min-h-screen bg-background p-6">
+      <main className="min-h-screen bg-background p-4 sm:p-6">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-2xl font-bold">Enrollments</h1>
               <p className="text-sm text-muted-foreground">{enrollments.length} total</p>
             </div>
-            <Button variant="outline" size="sm" onClick={signOut}>
+            <Button variant="outline" size="sm" onClick={signOut} className="w-full sm:w-auto">
               <LogOut className="h-4 w-4 mr-2" /> Sign out
             </Button>
           </div>
 
-          <div className="rounded-lg border border-border/60 overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto rounded-lg border border-border/60">
+            <table className="w-full min-w-[860px] text-sm">
               <thead className="bg-muted/50">
                 <tr className="text-left">
                   <th className="px-4 py-3 font-medium">Name</th>
@@ -227,7 +227,7 @@ function AdminDashboard() {
                     </td>
                     <td className="px-4 py-3 font-mono text-xs">{e.mpesa_receipt || "—"}</td>
                     <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex flex-wrap items-center justify-end gap-2">
                         {toast?.id === e.id && (
                           <span
                             className={`text-xs flex items-center gap-1 ${toast.ok ? "text-success" : "text-destructive"}`}
@@ -240,12 +240,13 @@ function AdminDashboard() {
                             {toast.msg}
                           </span>
                         )}
-                        <Button size="sm" variant="outline" onClick={() => openDetails(e)}>
+                        <Button size="sm" variant="outline" onClick={() => openDetails(e)} className="shrink-0">
                           <Eye className="h-3 w-3 mr-1" /> Details
                         </Button>
                         <Button
                           size="sm"
                           variant="outline"
+                          className="shrink-0"
                           disabled={resending === e.id || e.payment_status !== "success"}
                           onClick={() => resend(e.id)}
                           title={
@@ -264,6 +265,7 @@ function AdminDashboard() {
                         </Button>
                         <Button
                           size="sm"
+                          className="shrink-0"
                           disabled={issuing === e.id || e.payment_status !== "success"}
                           onClick={() => issueCert(e.id)}
                           title={
@@ -406,11 +408,11 @@ function AdminDashboard() {
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-start justify-between gap-4">
+    <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
       <span className="text-muted-foreground text-xs uppercase tracking-wide flex-shrink-0">
         {label}
       </span>
-      <span className="text-right">{children}</span>
+      <span className="text-left sm:text-right">{children}</span>
     </div>
   );
 }

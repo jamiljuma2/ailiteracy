@@ -9,7 +9,7 @@ export const Route = createFileRoute("/admin/sessions")({
 function AdminSessionsPage() {
   return (
     <AppSidebar variant="admin">
-      <main className="min-h-screen bg-background p-6">
+      <main className="min-h-screen bg-background p-4 sm:p-6">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl font-bold mb-6">Admin: Manage Sessions</h1>
           <AdminSessionDashboard />

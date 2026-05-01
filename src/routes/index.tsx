@@ -144,7 +144,7 @@ function Landing() {
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
       <header className="fixed top-0 inset-x-0 z-40 glass">
-        <nav className="container mx-auto max-w-6xl flex items-center justify-between px-6 py-4">
+        <nav className="container mx-auto max-w-6xl flex items-center justify-between px-4 sm:px-6 py-4">
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-lg bg-gradient-hero flex items-center justify-center shadow-glow">
               <Sparkles className="h-4 w-4 text-primary-foreground" />
@@ -206,7 +206,7 @@ function Landing() {
       </header>
 
       {/* Hero */}
-      <section className="relative pt-36 pb-24 px-6 overflow-hidden">
+      <section className="relative overflow-hidden px-4 pt-28 pb-20 sm:px-6 sm:pt-36 sm:pb-24">
         <div
           className="absolute inset-0 -z-10 opacity-40"
           style={{
@@ -226,7 +226,7 @@ function Landing() {
             New cohort starts Monday — 47 seats left
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]">
+          <h1 className="text-4xl md:text-7xl font-bold tracking-tight leading-[1.05]">
             <span className="text-gradient">AI for Beginners.</span>
             <br />
             <span className="text-gradient-brand">Built for Kenya.</span>
@@ -253,7 +253,7 @@ function Landing() {
             </a>
           </div>
 
-          <div className="mt-12 flex items-center justify-center gap-8 text-sm text-muted-foreground">
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
             {audiences.map((a) => (
               <div key={a.label} className="flex items-center gap-2">
                 <a.icon className="h-4 w-4 text-primary" />
@@ -265,7 +265,7 @@ function Landing() {
       </section>
 
       {/* Benefits */}
-      <section className="py-24 px-6">
+      <section className="px-4 py-20 sm:px-6 sm:py-24">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <p className="text-sm uppercase tracking-widest text-primary font-medium mb-3">
@@ -294,7 +294,7 @@ function Landing() {
       </section>
 
       {/* Modules */}
-      <section id="modules" className="py-24 px-6 relative">
+      <section id="modules" className="relative px-4 py-20 sm:px-6 sm:py-24">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <p className="text-sm uppercase tracking-widest text-primary font-medium mb-3">
@@ -325,7 +325,7 @@ function Landing() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-24 px-6">
+      <section id="testimonials" className="px-4 py-20 sm:px-6 sm:py-24">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <p className="text-sm uppercase tracking-widest text-primary font-medium mb-3">
@@ -361,7 +361,7 @@ function Landing() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-24 px-6">
+      <section id="pricing" className="px-4 py-20 sm:px-6 sm:py-24">
         <div className="container mx-auto max-w-3xl">
           <div className="relative rounded-3xl bg-gradient-card border border-primary/30 p-10 md:p-14 shadow-elegant overflow-hidden">
             <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-primary/20 blur-3xl animate-pulse-glow" />
@@ -415,7 +415,7 @@ function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border/40 py-10 px-6 mt-12">
+      <footer className="mt-12 border-t border-border/40 px-4 py-10 sm:px-6">
         <div className="container mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <div className="h-6 w-6 rounded-md bg-gradient-hero flex items-center justify-center">

@@ -48,6 +48,9 @@ export default function SessionList() {
             <p className="text-gray-500 mb-2">
               {new Date(session.date).toLocaleString()}
             </p>
+            <p className="text-gray-500 mb-2 text-sm">
+              Duration: {session.duration_minutes ? `${session.duration_minutes} min` : "Not set"}
+            </p>
           </div>
           <a
             href={session.meet_link}

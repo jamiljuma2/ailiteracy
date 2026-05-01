@@ -97,9 +97,9 @@ export function AppSidebar({ variant, children, onSignOut }: AppSidebarProps) {
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <div className="flex items-center gap-2 border-b border-border/60 px-4 py-3 md:hidden">
+        <div className="sticky top-0 z-20 flex items-center gap-2 border-b border-border/60 bg-background/95 px-3 py-3 backdrop-blur md:hidden">
           <SidebarTrigger />
-          <div className="text-sm font-medium text-foreground">
+          <div className="min-w-0 truncate text-sm font-medium text-foreground">
             {variant === "admin" ? "Admin Console" : "Student Portal"}
           </div>
         </div>

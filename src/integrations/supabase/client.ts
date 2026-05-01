@@ -11,9 +11,30 @@ function createSupabaseClient() {
     import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SB_PUBLISHABLE_KEY;
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-    throw new Error(
-      "Missing Supabase environment variables. Ensure SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY (or VITE_ prefixed or SB_ alternatives) are set in your environment.",
-    );
+    const msg =
+      "Missing Supabase environment variables. Ensure VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY (or SUPABASE_ / SB_ alternatives) are set.";
+    // On the server we must fail loudly. In the browser, defer the failure until the client is actually used
+    if (typeof window === "undefined") {
+      throw new Error(msg);
+    }
+
+    // Browser: return a lazy proxy that throws a clear error when any method/property is accessed.
+    // This avoids breaking page render while still giving a descriptive error when the app tries to use Supabase.
+    const browserStub = new Proxy(
+      {},
+      {
+        get(_, prop) {
+          throw new Error(
+            `${msg} Attempted to access Supabase client property or method: ${String(prop)}`,
+          );
+        },
+        apply() {
+          throw new Error(msg);
+        },
+      },
+    ) as unknown as ReturnType<typeof createSupabaseClient>;
+
+    return browserStub;
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {

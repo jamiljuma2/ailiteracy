@@ -18,14 +18,33 @@ function AdminLogin() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
+
+    const routeAuthenticatedUser = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (cancelled || !session) return;
+
+      const { data: role } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+
+      navigate({ to: role ? "/admin" : "/dashboard" });
+    };
+
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) navigate({ to: "/admin" });
+    } = supabase.auth.onAuthStateChange(() => {
+      void routeAuthenticatedUser();
     });
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/admin" });
-    });
+
+    void routeAuthenticatedUser();
+
     return () => subscription.unsubscribe();
   }, [navigate]);
 

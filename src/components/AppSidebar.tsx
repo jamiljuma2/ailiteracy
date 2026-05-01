@@ -43,7 +43,6 @@ export function AppSidebar({ variant, children, onSignOut }: AppSidebarProps) {
       : [
           { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
           { label: "Sessions", to: "/sessions", icon: Video },
-          { label: "Admin Login", to: "/admin/login", icon: Settings2 },
         ];
 
   return (

@@ -171,41 +171,41 @@ function Landing() {
               Pricing
             </a>
           </div>
-          <div className="flex items-center gap-2">
-            {/* Desktop nav */}
-            <div className="hidden sm:flex items-center gap-2">
-              {isAdmin && (
+          <div className="flex items-center gap-3">
+            {/* Admin link - desktop only */}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="hidden sm:inline-block text-sm text-primary hover:text-foreground transition-colors px-3 py-2"
+              >
+                Admin
+              </Link>
+            )}
+            
+            {/* Auth links */}
+            {signedIn ? (
+              <>
                 <Link
-                  to="/admin"
-                  className="text-sm text-primary hover:text-foreground transition-colors px-3 py-2"
+                  to="/dashboard"
+                  className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
                 >
-                  Admin
+                  Dashboard
                 </Link>
-              )}
-              {signedIn ? (
-                <>
-                  <Link
-                    to="/dashboard"
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
-                  >
-                    My Dashboard
-                  </Link>
-                  <button
-                    onClick={handleSignOut}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
-                  >
-                    Sign out
-                  </button>
-                </>
-              ) : (
-                <Link
-                  to="/login"
+                <button
+                  onClick={handleSignOut}
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
                 >
-                  Sign in
-                </Link>
-              )}
-            </div>
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="text-sm bg-gradient-hero text-primary-foreground hover:opacity-90 rounded-lg px-4 py-2 font-medium transition-opacity"
+              >
+                Sign in
+              </Link>
+            )}
             
             {/* Mobile menu button */}
             <button
@@ -215,14 +215,6 @@ function Landing() {
             >
               <Menu className="h-5 w-5" />
             </button>
-            
-            <Button
-              onClick={() => setEnrollOpen(true)}
-              size="sm"
-              className="bg-gradient-hero text-primary-foreground hover:opacity-90"
-            >
-              Enroll
-            </Button>
           </div>
         </nav>
       </header>
@@ -272,7 +264,7 @@ function Landing() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
                 >
-                  My Dashboard
+                  Dashboard
                 </Link>
                 <button
                   onClick={() => {
@@ -288,7 +280,7 @@ function Landing() {
               <Link
                 to="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+                className="text-sm bg-gradient-hero text-primary-foreground hover:opacity-90 rounded-lg px-4 py-2 font-medium transition-opacity block text-center"
               >
                 Sign in
               </Link>

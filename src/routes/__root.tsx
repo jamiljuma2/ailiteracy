@@ -2,6 +2,22 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 
 import appCss from "../styles.css?url";
 
+function runtimeEnvScript() {
+  const publicEnv = {
+    VITE_SUPABASE_URL:
+      process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.SB_URL || "",
+    VITE_SUPABASE_PUBLISHABLE_KEY:
+      process.env.SUPABASE_PUBLISHABLE_KEY ||
+      process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+      process.env.SB_PUBLISHABLE_KEY ||
+      "",
+  };
+
+  return {
+    __html: `window.__APP_ENV__ = ${JSON.stringify(publicEnv)};`,
+  };
+}
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -87,6 +103,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <script dangerouslySetInnerHTML={runtimeEnvScript()} />
       </head>
       <body>
         {children}

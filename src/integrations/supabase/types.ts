@@ -215,6 +215,36 @@ export type Database = {
           },
         ];
       };
+      sessions: {
+        Row: {
+          created_at: string;
+          date: string;
+          duration_minutes: number;
+          id: string;
+          meet_link: string;
+          title: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          date: string;
+          duration_minutes?: number;
+          id?: string;
+          meet_link: string;
+          title: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          date?: string;
+          duration_minutes?: number;
+          id?: string;
+          meet_link?: string;
+          title?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       user_roles: {
         Row: {
           created_at: string;

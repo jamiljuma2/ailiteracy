@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function SessionForm({
   initial,
@@ -94,20 +95,13 @@ export default function SessionForm({
       </div>
       {error && <div className="text-red-600 text-sm">{error}</div>}
       <div className="flex flex-col gap-2 sm:flex-row">
-        <button
-          type="submit"
-          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        >
+        <Button type="submit" className="w-full sm:w-auto">
           Save
-        </button>
+        </Button>
         {onCancel && (
-          <button
-            type="button"
-            className="rounded bg-gray-200 px-4 py-2 hover:bg-gray-300"
-            onClick={onCancel}
-          >
+          <Button variant="outline" onClick={onCancel} className="w-full sm:w-auto">
             Cancel
-          </button>
+          </Button>
         )}
       </div>
     </form>

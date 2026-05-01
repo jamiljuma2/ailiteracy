@@ -64,7 +64,8 @@ export const Route = createFileRoute("/api/public/lipana-webhook")({
               payment_status: newStatus,
               course_access: newStatus === "success",
               mpesa_receipt: mpesaReceipt ?? enrollment.mpesa_receipt,
-              failure_reason: newStatus === "failed" ? data.message ?? data.status ?? "Payment failed" : null,
+              failure_reason:
+                newStatus === "failed" ? (data.message ?? data.status ?? "Payment failed") : null,
             })
             .eq("id", enrollment.id);
         }

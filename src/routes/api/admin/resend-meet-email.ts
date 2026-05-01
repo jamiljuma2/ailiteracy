@@ -31,16 +31,22 @@ export const Route = createFileRoute("/api/admin/resend-meet-email")({
         if (!roleRow) return new Response("Forbidden", { status: 403 });
 
         let body: any;
-        try { body = await request.json(); } catch { return Response.json({ error: "Invalid JSON" }, { status: 400 }); }
+        try {
+          body = await request.json();
+        } catch {
+          return Response.json({ error: "Invalid JSON" }, { status: 400 });
+        }
         const enrollmentId: string | undefined = body?.enrollmentId;
-        if (!enrollmentId) return Response.json({ error: "enrollmentId required" }, { status: 400 });
+        if (!enrollmentId)
+          return Response.json({ error: "enrollmentId required" }, { status: 400 });
 
         const { data: enrollment, error: eErr } = await supabaseAdmin
           .from("enrollments")
           .select("id, full_name, email, payment_status")
           .eq("id", enrollmentId)
           .maybeSingle();
-        if (eErr || !enrollment) return Response.json({ error: "Enrollment not found" }, { status: 404 });
+        if (eErr || !enrollment)
+          return Response.json({ error: "Enrollment not found" }, { status: 404 });
 
         const result = await sendMeetEmail({
           enrollmentId: enrollment.id,

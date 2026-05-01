@@ -4,15 +4,24 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getMyMeetLink } from "@/server/meet-link.functions";
+import { AppSidebar } from "@/components/AppSidebar";
 import {
-  Sparkles, Video, CheckCircle2, Clock, XCircle, ArrowRight, LogOut, ExternalLink,
+  Video,
+  CheckCircle2,
+  Clock,
+  XCircle,
+  ArrowRight,
+  ExternalLink,
 } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
       { title: "My Dashboard — AI Skills Africa" },
-      { name: "description", content: "View your enrollments, payment status, and join active Google Meet sessions." },
+      {
+        name: "description",
+        content: "View your enrollments, payment status, and join active Google Meet sessions.",
+      },
     ],
   }),
   component: Dashboard,
@@ -35,12 +44,27 @@ type Enrollment = {
 function statusBadge(status: string) {
   const s = status.toLowerCase();
   if (s === "paid" || s === "success" || s === "completed") {
-    return <Badge className="bg-success/15 text-success border-success/30 hover:bg-success/20"><CheckCircle2 className="h-3 w-3 mr-1" />Paid</Badge>;
+    return (
+      <Badge className="bg-success/15 text-success border-success/30 hover:bg-success/20">
+        <CheckCircle2 className="h-3 w-3 mr-1" />
+        Paid
+      </Badge>
+    );
   }
   if (s === "failed" || s === "cancelled") {
-    return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />{status}</Badge>;
+    return (
+      <Badge variant="destructive">
+        <XCircle className="h-3 w-3 mr-1" />
+        {status}
+      </Badge>
+    );
   }
-  return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />{status}</Badge>;
+  return (
+    <Badge variant="secondary">
+      <Clock className="h-3 w-3 mr-1" />
+      {status}
+    </Badge>
+  );
 }
 
 function Dashboard() {
@@ -66,7 +90,9 @@ function Dashboard() {
 
       const { data, error: enrollErr } = await supabase
         .from("enrollments")
-        .select("id, full_name, email, phone, amount, payment_status, course_access, course_completed, mpesa_receipt, failure_reason, created_at")
+        .select(
+          "id, full_name, email, phone, amount, payment_status, course_access, course_completed, mpesa_receipt, failure_reason, created_at",
+        )
         .order("created_at", { ascending: false });
 
       if (cancelled) return;
@@ -88,7 +114,9 @@ function Dashboard() {
 
     load();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_e, session) => {
       if (!session) navigate({ to: "/login" });
     });
 
@@ -107,27 +135,8 @@ function Dashboard() {
   const hasActive = activeEnrollments.length > 0;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="fixed top-0 inset-x-0 z-40 glass">
-        <nav className="container mx-auto max-w-6xl flex items-center justify-between px-6 py-4">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-hero flex items-center justify-center shadow-glow">
-              <Sparkles className="h-4 w-4 text-primary-foreground" />
-            </div>
-            <span className="font-display font-semibold tracking-tight">AI Skills Africa</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Link to="/" className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
-              Home
-            </Link>
-            <Button onClick={handleSignOut} size="sm" variant="outline">
-              <LogOut className="h-4 w-4" /> Sign out
-            </Button>
-          </div>
-        </nav>
-      </header>
-
-      <main className="pt-28 pb-20 px-6">
+    <AppSidebar variant="user" onSignOut={handleSignOut}>
+      <main className="min-h-screen bg-background text-foreground px-6 py-8">
         <div className="container mx-auto max-w-5xl">
           <div className="mb-10">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">My Dashboard</h1>
@@ -196,7 +205,10 @@ function Dashboard() {
             ) : (
               <div className="space-y-4">
                 {enrollments.map((e) => (
-                  <div key={e.id} className="rounded-2xl bg-gradient-card border border-border/60 p-6 shadow-card">
+                  <div
+                    key={e.id}
+                    className="rounded-2xl bg-gradient-card border border-border/60 p-6 shadow-card"
+                  >
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
@@ -230,7 +242,9 @@ function Dashboard() {
                           )}
                           <div className="flex justify-between sm:block">
                             <dt className="text-muted-foreground">Enrolled</dt>
-                            <dd className="font-medium">{new Date(e.created_at).toLocaleDateString()}</dd>
+                            <dd className="font-medium">
+                              {new Date(e.created_at).toLocaleDateString()}
+                            </dd>
                           </div>
                         </dl>
                         {e.failure_reason && (
@@ -238,7 +252,12 @@ function Dashboard() {
                         )}
                       </div>
                       {e.course_access && !e.course_completed && meetLink && (
-                        <a href={meetLink} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
+                        <a
+                          href={meetLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-shrink-0"
+                        >
                           <Button size="sm" variant="outline">
                             <Video className="h-4 w-4" /> Join Meet
                           </Button>
@@ -252,6 +271,6 @@ function Dashboard() {
           </section>
         </div>
       </main>
-    </div>
+    </AppSidebar>
   );
 }

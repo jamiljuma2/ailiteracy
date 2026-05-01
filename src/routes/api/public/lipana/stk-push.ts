@@ -18,7 +18,7 @@ function normalizePhone(raw: string): string | null {
   return null;
 }
 
-const AMOUNT = 2500;
+const AMOUNT = 3000;
 
 export const Route = createFileRoute("/api/public/lipana/stk-push")({
   server: {

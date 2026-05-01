@@ -18,7 +18,9 @@ function AdminLogin() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) navigate({ to: "/admin" });
     });
     supabase.auth.getSession().then(({ data }) => {
@@ -39,25 +41,48 @@ function AdminLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4 p-6 rounded-xl border border-border/60 bg-card">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-sm space-y-4 p-6 rounded-xl border border-border/60 bg-card"
+      >
         <div>
           <h1 className="text-2xl font-semibold">Admin login</h1>
           <p className="text-sm text-muted-foreground mt-1">Sign in to manage enrollments.</p>
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <Input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <Input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Signing in…</> : "Sign in"}
+          {loading ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin mr-2" /> Signing in…
+            </>
+          ) : (
+            "Sign in"
+          )}
         </Button>
         <p className="text-xs text-muted-foreground text-center">
-          <Link to="/" className="hover:text-foreground">← Back to site</Link>
+          <Link to="/" className="hover:text-foreground">
+            ← Back to site
+          </Link>
         </p>
       </form>
     </div>

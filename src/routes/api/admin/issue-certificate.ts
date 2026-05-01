@@ -39,7 +39,8 @@ export const Route = createFileRoute("/api/admin/issue-certificate")({
           return Response.json({ error: "Invalid JSON" }, { status: 400 });
         }
         const enrollmentId: string | undefined = body?.enrollmentId;
-        if (!enrollmentId) return Response.json({ error: "enrollmentId required" }, { status: 400 });
+        if (!enrollmentId)
+          return Response.json({ error: "enrollmentId required" }, { status: 400 });
 
         const { data: enrollment, error: eErr } = await supabaseAdmin
           .from("enrollments")
@@ -50,10 +51,7 @@ export const Route = createFileRoute("/api/admin/issue-certificate")({
           return Response.json({ error: "Enrollment not found" }, { status: 404 });
         }
         if (enrollment.payment_status !== "success") {
-          return Response.json(
-            { error: "Enrollment is not paid" },
-            { status: 400 },
-          );
+          return Response.json({ error: "Enrollment is not paid" }, { status: 400 });
         }
 
         const courseTitle = "AI for Beginners";

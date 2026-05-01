@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -25,8 +31,10 @@ export function EnrollDialog({ open, onOpenChange }: Props) {
     setError(null);
 
     if (!form.name.trim() || form.name.length < 2) return setError("Please enter your full name");
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) return setError("Please enter a valid email");
-    if (!validatePhone(form.phone)) return setError("Enter a valid Safaricom number (e.g. 0712 345 678)");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email))
+      return setError("Please enter a valid email");
+    if (!validatePhone(form.phone))
+      return setError("Enter a valid Safaricom number (e.g. 0712 345 678)");
 
     setStatus("sending");
     try {
@@ -60,7 +68,13 @@ export function EnrollDialog({ open, onOpenChange }: Props) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={(o) => { onOpenChange(o); if (!o) setTimeout(reset, 300); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(o) => {
+        onOpenChange(o);
+        if (!o) setTimeout(reset, 300);
+      }}
+    >
       <DialogContent className="sm:max-w-md glass border-border/60">
         {status === "success" ? (
           <div className="py-6 text-center space-y-4">
@@ -69,37 +83,60 @@ export function EnrollDialog({ open, onOpenChange }: Props) {
             </div>
             <DialogTitle className="text-2xl">You're enrolled! 🎉</DialogTitle>
             <DialogDescription className="text-base">
-              Confirmation sent to <span className="text-foreground font-medium">{form.email}</span>.
-              Check your inbox for the Google Meet link and schedule.
+              Confirmation sent to <span className="text-foreground font-medium">{form.email}</span>
+              . Check your inbox for the Google Meet link and schedule.
             </DialogDescription>
-            <Button onClick={() => onOpenChange(false)} className="w-full mt-4" size="lg">Done</Button>
+            <Button onClick={() => onOpenChange(false)} className="w-full mt-4" size="lg">
+              Done
+            </Button>
           </div>
         ) : (
           <>
             <DialogHeader>
               <DialogTitle className="text-2xl">Enroll in the cohort</DialogTitle>
               <DialogDescription>
-                Pay <span className="text-primary font-semibold">KES 2,500</span> via M-Pesa STK Push. Takes 30 seconds.
+                Pay <span className="text-primary font-semibold">KES 3,000</span> via M-Pesa STK
+                Push. Takes 30 seconds.
               </DialogDescription>
             </DialogHeader>
 
             <form onSubmit={handleSubmit} className="space-y-4 mt-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Full name</Label>
-                <Input id="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="Jane Wanjiku" disabled={status !== "idle"} maxLength={80} />
+                <Input
+                  id="name"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  placeholder="Jane Wanjiku"
+                  disabled={status !== "idle"}
+                  maxLength={80}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  placeholder="jane@example.com" disabled={status !== "idle"} maxLength={120} />
+                <Input
+                  id="email"
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  placeholder="jane@example.com"
+                  disabled={status !== "idle"}
+                  maxLength={120}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">M-Pesa number</Label>
                 <div className="relative">
                   <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input id="phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    placeholder="0712 345 678" className="pl-9" disabled={status !== "idle"} maxLength={15} />
+                  <Input
+                    id="phone"
+                    value={form.phone}
+                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                    placeholder="0712 345 678"
+                    className="pl-9"
+                    disabled={status !== "idle"}
+                    maxLength={15}
+                  />
                 </div>
               </div>
 
@@ -111,20 +148,36 @@ export function EnrollDialog({ open, onOpenChange }: Props) {
                     <Loader2 className="h-4 w-4 animate-spin text-primary mt-0.5" />
                     <div>
                       <p className="font-medium text-foreground">Check your phone</p>
-                      <p className="text-muted-foreground mt-1">We've sent an M-Pesa prompt. Enter your PIN to complete payment.</p>
+                      <p className="text-muted-foreground mt-1">
+                        We've sent an M-Pesa prompt. Enter your PIN to complete payment.
+                      </p>
                       {txRef && (
-                        <p className="text-xs text-muted-foreground/70 mt-2 font-mono">Ref: {txRef}</p>
+                        <p className="text-xs text-muted-foreground/70 mt-2 font-mono">
+                          Ref: {txRef}
+                        </p>
                       )}
                     </div>
                   </div>
                 </div>
               )}
 
-              <Button type="submit" size="lg" className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90 shadow-glow"
-                disabled={status !== "idle"}>
-                {status === "sending" && <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Initiating...</>}
-                {status === "pending" && <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Awaiting M-Pesa...</>}
-                {status === "idle" && <>Pay KES 2,500 with M-Pesa</>}
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full bg-gradient-hero text-primary-foreground hover:opacity-90 shadow-glow"
+                disabled={status !== "idle"}
+              >
+                {status === "sending" && (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" /> Initiating...
+                  </>
+                )}
+                {status === "pending" && (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" /> Awaiting M-Pesa...
+                  </>
+                )}
+                {status === "idle" && <>Pay KES 3,000 with M-Pesa</>}
               </Button>
 
               <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">

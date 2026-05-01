@@ -9,11 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SessionsRouteImport } from './routes/sessions'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminSessionsRouteImport } from './routes/admin/sessions'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as ApiPublicLipanaWebhookRouteImport } from './routes/api/public/lipana-webhook'
 import { Route as ApiAdminResendMeetEmailRouteImport } from './routes/api/admin/resend-meet-email'
@@ -21,6 +23,11 @@ import { Route as ApiAdminIssueCertificateRouteImport } from './routes/api/admin
 import { Route as ApiPublicLipanaStkPushRouteImport } from './routes/api/public/lipana/stk-push'
 import { Route as ApiPublicCertificateTokenRouteImport } from './routes/api/public/certificate.$token'
 
+const SessionsRoute = SessionsRouteImport.update({
+  id: '/sessions',
+  path: '/sessions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -44,6 +51,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSessionsRoute = AdminSessionsRouteImport.update({
+  id: '/admin/sessions',
+  path: '/admin/sessions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -84,7 +96,9 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/sessions': typeof SessionsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/sessions': typeof AdminSessionsRoute
   '/admin/': typeof AdminIndexRoute
   '/api/admin/issue-certificate': typeof ApiAdminIssueCertificateRoute
   '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
@@ -97,7 +111,9 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/sessions': typeof SessionsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/sessions': typeof AdminSessionsRoute
   '/admin': typeof AdminIndexRoute
   '/api/admin/issue-certificate': typeof ApiAdminIssueCertificateRoute
   '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
@@ -111,7 +127,9 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/sessions': typeof SessionsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/sessions': typeof AdminSessionsRoute
   '/admin/': typeof AdminIndexRoute
   '/api/admin/issue-certificate': typeof ApiAdminIssueCertificateRoute
   '/api/admin/resend-meet-email': typeof ApiAdminResendMeetEmailRoute
@@ -126,7 +144,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/sessions'
     | '/admin/login'
+    | '/admin/sessions'
     | '/admin/'
     | '/api/admin/issue-certificate'
     | '/api/admin/resend-meet-email'
@@ -139,7 +159,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/sessions'
     | '/admin/login'
+    | '/admin/sessions'
     | '/admin'
     | '/api/admin/issue-certificate'
     | '/api/admin/resend-meet-email'
@@ -152,7 +174,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/sessions'
     | '/admin/login'
+    | '/admin/sessions'
     | '/admin/'
     | '/api/admin/issue-certificate'
     | '/api/admin/resend-meet-email'
@@ -166,7 +190,9 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  SessionsRoute: typeof SessionsRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminSessionsRoute: typeof AdminSessionsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   ApiAdminIssueCertificateRoute: typeof ApiAdminIssueCertificateRoute
   ApiAdminResendMeetEmailRoute: typeof ApiAdminResendMeetEmailRoute
@@ -177,6 +203,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sessions': {
+      id: '/sessions'
+      path: '/sessions'
+      fullPath: '/sessions'
+      preLoaderRoute: typeof SessionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -210,6 +243,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/sessions': {
+      id: '/admin/sessions'
+      path: '/admin/sessions'
+      fullPath: '/admin/sessions'
+      preLoaderRoute: typeof AdminSessionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/login': {
@@ -262,7 +302,9 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  SessionsRoute: SessionsRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminSessionsRoute: AdminSessionsRoute,
   AdminIndexRoute: AdminIndexRoute,
   ApiAdminIssueCertificateRoute: ApiAdminIssueCertificateRoute,
   ApiAdminResendMeetEmailRoute: ApiAdminResendMeetEmailRoute,

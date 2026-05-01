@@ -187,8 +187,9 @@ export async function generateCertificatePdf({
 export function generateCertificateCode(): string {
   // e.g. AISA-2026-XXXXXX
   const year = new Date().getFullYear();
-  const rand = Array.from({ length: 6 }, () =>
-    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[Math.floor(Math.random() * 32)],
+  const rand = Array.from(
+    { length: 6 },
+    () => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[Math.floor(Math.random() * 32)],
   ).join("");
   return `AISA-${year}-${rand}`;
 }

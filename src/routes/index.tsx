@@ -4,8 +4,19 @@ import { Button } from "@/components/ui/button";
 import { EnrollDialog } from "@/components/EnrollDialog";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  Sparkles, Brain, Rocket, Users, CheckCircle2, Star, Calendar,
-  MessageSquare, Briefcase, GraduationCap, ArrowRight, Zap, Award
+  Sparkles,
+  Brain,
+  Rocket,
+  Users,
+  CheckCircle2,
+  Star,
+  Calendar,
+  MessageSquare,
+  Briefcase,
+  GraduationCap,
+  ArrowRight,
+  Zap,
+  Award,
 } from "lucide-react";
 import heroImg from "@/assets/hero-ai.jpg";
 
@@ -14,25 +25,82 @@ export const Route = createFileRoute("/")({
 });
 
 const modules = [
-  { num: "01", title: "AI Foundations", desc: "Demystify how LLMs, prompts & tokens actually work — no maths required." },
-  { num: "02", title: "Prompt Engineering", desc: "Master the techniques pros use to get 10x better outputs from ChatGPT, Claude & Gemini." },
-  { num: "03", title: "AI for Productivity", desc: "Automate research, emails, reports & content workflows in your day-to-day." },
-  { num: "04", title: "AI Tools Stack", desc: "Hands-on with Notion AI, Perplexity, Midjourney, ElevenLabs & 15+ tools." },
-  { num: "05", title: "Build Without Code", desc: "Ship a real AI-powered project — chatbot, automation, or content engine." },
-  { num: "06", title: "Monetize AI Skills", desc: "Land freelance gigs, offer AI services, or pitch AI projects at work." },
+  {
+    num: "01",
+    title: "AI Foundations",
+    desc: "Demystify how LLMs, prompts & tokens actually work — no maths required.",
+  },
+  {
+    num: "02",
+    title: "Prompt Engineering",
+    desc: "Master the techniques pros use to get 10x better outputs from ChatGPT, Claude & Gemini.",
+  },
+  {
+    num: "03",
+    title: "AI for Productivity",
+    desc: "Automate research, emails, reports & content workflows in your day-to-day.",
+  },
+  {
+    num: "04",
+    title: "AI Tools Stack",
+    desc: "Hands-on with Notion AI, Perplexity, Midjourney, ElevenLabs & 15+ tools.",
+  },
+  {
+    num: "05",
+    title: "Build Without Code",
+    desc: "Ship a real AI-powered project — chatbot, automation, or content engine.",
+  },
+  {
+    num: "06",
+    title: "Monetize AI Skills",
+    desc: "Land freelance gigs, offer AI services, or pitch AI projects at work.",
+  },
 ];
 
 const benefits = [
-  { icon: Brain, title: "Practical, not theoretical", desc: "Every lesson ends with a project you ship the same day." },
-  { icon: Rocket, title: "Designed for Kenya", desc: "Local case studies, Swahili examples, Kenyan freelance market focus." },
-  { icon: Users, title: "Live cohort + community", desc: "Learn alongside 200+ peers in a private WhatsApp & Discord." },
-  { icon: Award, title: "Certificate of completion", desc: "Verifiable credential to share on LinkedIn & with employers." },
+  {
+    icon: Brain,
+    title: "Practical, not theoretical",
+    desc: "Every lesson ends with a project you ship the same day.",
+  },
+  {
+    icon: Rocket,
+    title: "Designed for Kenya",
+    desc: "Local case studies, Swahili examples, Kenyan freelance market focus.",
+  },
+  {
+    icon: Users,
+    title: "Live cohort + community",
+    desc: "Learn alongside 200+ peers in a private WhatsApp & Discord.",
+  },
+  {
+    icon: Award,
+    title: "Certificate of completion",
+    desc: "Verifiable credential to share on LinkedIn & with employers.",
+  },
 ];
 
 const testimonials = [
-  { name: "Brian Otieno", role: "Marketing Freelancer, Nairobi", quote: "Landed a Ksh 80k/month retainer using AI workflows I learned in week 2. Best investment this year.", initial: "B" },
-  { name: "Achieng Odhiambo", role: "Final Year Student, JKUAT", quote: "I went from zero to building a chatbot for my dad's business. The instructor explains things so simply.", initial: "A" },
-  { name: "David Kamau", role: "Operations Manager", quote: "Saving 10+ hours a week on reports. My manager asked me to train the whole team.", initial: "D" },
+  {
+    name: "Brian Otieno",
+    role: "Marketing Freelancer, Nairobi",
+    quote:
+      "Landed a Ksh 80k/month retainer using AI workflows I learned in week 2. Best investment this year.",
+    initial: "B",
+  },
+  {
+    name: "Achieng Odhiambo",
+    role: "Final Year Student, JKUAT",
+    quote:
+      "I went from zero to building a chatbot for my dad's business. The instructor explains things so simply.",
+    initial: "A",
+  },
+  {
+    name: "David Kamau",
+    role: "Operations Manager",
+    quote: "Saving 10+ hours a week on reports. My manager asked me to train the whole team.",
+    initial: "D",
+  },
 ];
 
 const audiences = [
@@ -49,8 +117,11 @@ function Landing() {
   useEffect(() => {
     const checkAdmin = async (userId: string) => {
       const { data } = await supabase
-        .from("user_roles").select("role")
-        .eq("user_id", userId).eq("role", "admin").maybeSingle();
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .eq("role", "admin")
+        .maybeSingle();
       setIsAdmin(!!data);
     };
     const sync = (session: { user: { id: string } } | null) => {
@@ -58,7 +129,9 @@ function Landing() {
       if (session) checkAdmin(session.user.id);
       else setIsAdmin(false);
     };
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => sync(session));
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_e, session) => sync(session));
     supabase.auth.getSession().then(({ data }) => sync(data.session));
     return () => subscription.unsubscribe();
   }, []);
@@ -66,7 +139,6 @@ function Landing() {
   const handleSignOut = async () => {
     await supabase.auth.signOut();
   };
-
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -80,31 +152,53 @@ function Landing() {
             <span className="font-display font-semibold tracking-tight">AI Skills Africa</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            <a href="#modules" className="hover:text-foreground transition-colors">Curriculum</a>
-            <a href="#testimonials" className="hover:text-foreground transition-colors">Stories</a>
-            <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
+            <a href="#modules" className="hover:text-foreground transition-colors">
+              Curriculum
+            </a>
+            <a href="#testimonials" className="hover:text-foreground transition-colors">
+              Stories
+            </a>
+            <a href="#pricing" className="hover:text-foreground transition-colors">
+              Pricing
+            </a>
           </div>
           <div className="flex items-center gap-2">
             {isAdmin && (
-              <Link to="/admin" className="hidden sm:inline-block text-sm text-primary hover:text-foreground transition-colors px-3 py-2">
+              <Link
+                to="/admin"
+                className="hidden sm:inline-block text-sm text-primary hover:text-foreground transition-colors px-3 py-2"
+              >
                 Admin
               </Link>
             )}
             {signedIn ? (
               <>
-                <Link to="/dashboard" className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
+                <Link
+                  to="/dashboard"
+                  className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
+                >
                   My Dashboard
                 </Link>
-                <button onClick={handleSignOut} className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
+                <button
+                  onClick={handleSignOut}
+                  className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
+                >
                   Sign out
                 </button>
               </>
             ) : (
-              <Link to="/login" className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
+              <Link
+                to="/login"
+                className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
+              >
                 Sign in
               </Link>
             )}
-            <Button onClick={() => setEnrollOpen(true)} size="sm" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
+            <Button
+              onClick={() => setEnrollOpen(true)}
+              size="sm"
+              className="bg-gradient-hero text-primary-foreground hover:opacity-90"
+            >
               Enroll
             </Button>
           </div>
@@ -139,16 +233,22 @@ function Landing() {
           </h1>
 
           <p className="mt-8 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            A live 4-week cohort that turns curious students, freelancers & professionals
-            into confident AI users. Real projects. Real outcomes. Taught simply.
+            A live 4-week cohort that turns curious students, freelancers & professionals into
+            confident AI users. Real projects. Real outcomes. Taught simply.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" onClick={() => setEnrollOpen(true)}
-              className="bg-gradient-hero text-primary-foreground hover:opacity-90 shadow-glow text-base h-12 px-8">
-              Enroll for KES 2,500 <ArrowRight className="ml-2 h-4 w-4" />
+            <Button
+              size="lg"
+              onClick={() => setEnrollOpen(true)}
+              className="bg-gradient-hero text-primary-foreground hover:opacity-90 shadow-glow text-base h-12 px-8"
+            >
+              Enroll for KES 3,000 <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-            <a href="#modules" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <a
+              href="#modules"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
               See what you'll learn ↓
             </a>
           </div>
@@ -168,12 +268,20 @@ function Landing() {
       <section className="py-24 px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <p className="text-sm uppercase tracking-widest text-primary font-medium mb-3">Why this cohort</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Most AI courses are noise. <br/>This one ships results.</h2>
+            <p className="text-sm uppercase tracking-widest text-primary font-medium mb-3">
+              Why this cohort
+            </p>
+            <h2 className="text-4xl md:text-5xl font-bold">
+              Most AI courses are noise. <br />
+              This one ships results.
+            </h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {benefits.map((b) => (
-              <div key={b.title} className="group rounded-2xl bg-gradient-card border border-border/60 p-6 hover:border-primary/40 transition-all hover:-translate-y-1 shadow-card">
+              <div
+                key={b.title}
+                className="group rounded-2xl bg-gradient-card border border-border/60 p-6 hover:border-primary/40 transition-all hover:-translate-y-1 shadow-card"
+              >
                 <div className="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
                   <b.icon className="h-5 w-5 text-primary" />
                 </div>
@@ -189,12 +297,19 @@ function Landing() {
       <section id="modules" className="py-24 px-6 relative">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <p className="text-sm uppercase tracking-widest text-primary font-medium mb-3">The curriculum</p>
-            <h2 className="text-4xl md:text-5xl font-bold">6 modules. 4 weeks. <span className="text-gradient-brand">Endless leverage.</span></h2>
+            <p className="text-sm uppercase tracking-widest text-primary font-medium mb-3">
+              The curriculum
+            </p>
+            <h2 className="text-4xl md:text-5xl font-bold">
+              6 modules. 4 weeks. <span className="text-gradient-brand">Endless leverage.</span>
+            </h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {modules.map((m) => (
-              <div key={m.num} className="group relative rounded-2xl bg-gradient-card border border-border/60 p-7 hover:border-primary/40 transition-all overflow-hidden">
+              <div
+                key={m.num}
+                className="group relative rounded-2xl bg-gradient-card border border-border/60 p-7 hover:border-primary/40 transition-all overflow-hidden"
+              >
                 <div className="absolute -top-4 -right-4 text-7xl font-bold text-primary/5 font-display group-hover:text-primary/10 transition-colors">
                   {m.num}
                 </div>
@@ -213,14 +328,21 @@ function Landing() {
       <section id="testimonials" className="py-24 px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <p className="text-sm uppercase tracking-widest text-primary font-medium mb-3">Student stories</p>
+            <p className="text-sm uppercase tracking-widest text-primary font-medium mb-3">
+              Student stories
+            </p>
             <h2 className="text-4xl md:text-5xl font-bold">Real Kenyans. Real wins.</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t) => (
-              <div key={t.name} className="rounded-2xl bg-gradient-card border border-border/60 p-7 shadow-card">
+              <div
+                key={t.name}
+                className="rounded-2xl bg-gradient-card border border-border/60 p-7 shadow-card"
+              >
                 <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-primary text-primary" />)}
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                  ))}
                 </div>
                 <p className="text-foreground/90 leading-relaxed mb-6">"{t.quote}"</p>
                 <div className="flex items-center gap-3">
@@ -250,10 +372,14 @@ function Landing() {
                 <Zap className="h-3 w-3" /> One-time payment · Lifetime access
               </div>
               <h2 className="text-4xl md:text-5xl font-bold mb-4">Join the next cohort</h2>
-              <p className="text-muted-foreground mb-8">Everything included. No upsells. No subscriptions.</p>
+              <p className="text-muted-foreground mb-8">
+                Everything included. No upsells. No subscriptions.
+              </p>
 
               <div className="flex items-baseline justify-center gap-2 mb-8">
-                <span className="text-6xl md:text-7xl font-bold text-gradient-brand font-display">2,500</span>
+                <span className="text-6xl md:text-7xl font-bold text-gradient-brand font-display">
+                  3,000
+                </span>
                 <span className="text-2xl text-muted-foreground font-medium">KES</span>
               </div>
 
@@ -273,8 +399,11 @@ function Landing() {
                 ))}
               </ul>
 
-              <Button size="lg" onClick={() => setEnrollOpen(true)}
-                className="bg-gradient-hero text-primary-foreground hover:opacity-90 shadow-glow text-base h-13 px-10 w-full sm:w-auto">
+              <Button
+                size="lg"
+                onClick={() => setEnrollOpen(true)}
+                className="bg-gradient-hero text-primary-foreground hover:opacity-90 shadow-glow text-base h-13 px-10 w-full sm:w-auto"
+              >
                 Pay with M-Pesa <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
               <p className="text-xs text-muted-foreground mt-4 flex items-center justify-center gap-1.5">
@@ -295,7 +424,10 @@ function Landing() {
             <span>© 2026 AI Skills Africa</span>
           </div>
           <div className="flex items-center gap-6">
-            <a href="mailto:hello@aiskills.africa" className="hover:text-foreground transition-colors flex items-center gap-1.5">
+            <a
+              href="mailto:hello@aiskills.africa"
+              className="hover:text-foreground transition-colors flex items-center gap-1.5"
+            >
               <MessageSquare className="h-3.5 w-3.5" />
               <span>hello@aiskills.africa</span>
             </a>

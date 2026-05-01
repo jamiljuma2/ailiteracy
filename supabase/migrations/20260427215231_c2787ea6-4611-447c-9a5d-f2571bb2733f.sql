@@ -4,7 +4,7 @@ CREATE TABLE public.enrollments (
   full_name TEXT NOT NULL,
   email TEXT NOT NULL,
   phone TEXT NOT NULL,
-  amount INTEGER NOT NULL DEFAULT 2500,
+  amount INTEGER NOT NULL DEFAULT 3000,
   payment_status TEXT NOT NULL DEFAULT 'pending', -- pending | success | failed | cancelled
   course_access BOOLEAN NOT NULL DEFAULT false,
   checkout_request_id TEXT UNIQUE,

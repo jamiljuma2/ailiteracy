@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { getMyMeetLink } from "@/server/meet-link.functions.server";
 import { AppSidebar } from "@/components/AppSidebar";
 import {
   Video,
@@ -103,8 +102,20 @@ function Dashboard() {
       }
 
       try {
-        const res = await getMyMeetLink();
-        if (!cancelled) setMeetLink(res.meetLink);
+        // Get the session to extract the JWT token
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData.session?.access_token;
+        if (!token) throw new Error("No auth token");
+
+        const response = await fetch("/api/public/get-meet-link", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const result = await response.json();
+        if (!cancelled) setMeetLink(result.meetLink);
       } catch {
         // user has no active enrollment — leave null
       }

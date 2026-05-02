@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.certificates (
   certificate_code text NOT NULL UNIQUE,
   recipient_name text NOT NULL,
   recipient_email text NOT NULL,
-  course_title text NOT NULL DEFAULT 'AI for Beginners',
+  course_title text NOT NULL DEFAULT 'AI For Everyone',
   issued_at timestamptz NOT NULL DEFAULT now(),
   issued_by uuid,
   email_status text NOT NULL DEFAULT 'pending',

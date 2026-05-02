@@ -223,7 +223,7 @@ function Dashboard() {
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className="font-semibold text-lg">AI for Beginners</h3>
+                          <h3 className="font-semibold text-lg">AI For Everyone</h3>
                           {statusBadge(e.payment_status)}
                           {e.course_access && (
                             <Badge variant="outline" className="border-primary/40 text-primary">

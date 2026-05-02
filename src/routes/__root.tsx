@@ -45,7 +45,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "AI for Beginners — Practical Skills for Students & Professionals | Kenya" },
+      { title: "AI For Everyone — Practical Skills for Students & Professionals | Kenya" },
       {
         name: "description",
         content:
@@ -54,7 +54,7 @@ export const Route = createRootRoute({
       { name: "author", content: "AI Skills Africa" },
       {
         property: "og:title",
-        content: "AI for Beginners — Practical Skills for Students & Professionals | Kenya",
+        content: "AI For Everyone — Practical Skills for Students & Professionals | Kenya",
       },
       {
         property: "og:description",
@@ -65,7 +65,7 @@ export const Route = createRootRoute({
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "AI for Beginners — Practical Skills for Students & Professionals | Kenya",
+        content: "AI For Everyone — Practical Skills for Students & Professionals | Kenya",
       },
       {
         name: "twitter:description",

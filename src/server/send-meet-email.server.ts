@@ -29,7 +29,7 @@ export async function sendMeetEmail({
       <div style="max-width:560px;margin:0 auto;">
         <h1 style="font-size:22px;margin:0 0 16px;">Welcome, ${escapeHtml(recipientName)} 🎉</h1>
         <p style="font-size:15px;line-height:1.6;color:#333;">
-          Your enrollment in the <strong>AI for Beginners</strong> cohort is confirmed.
+          Your enrollment in the <strong>AI For Everyone</strong> cohort is confirmed.
           We're excited to have you.
         </p>
         <p style="font-size:15px;line-height:1.6;color:#333;margin-top:16px;">

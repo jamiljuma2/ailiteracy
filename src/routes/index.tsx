@@ -311,7 +311,7 @@ function Landing() {
           </div>
 
           <h1 className="text-4xl md:text-7xl font-bold tracking-tight leading-[1.05]">
-            <span className="text-gradient">AI for Beginners.</span>
+            <span className="text-gradient">AI For Everyone.</span>
             <br />
             <span className="text-gradient-brand">Built for Kenya.</span>
           </h1>

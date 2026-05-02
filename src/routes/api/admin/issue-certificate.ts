@@ -54,7 +54,7 @@ export const Route = createFileRoute("/api/admin/issue-certificate")({
           return Response.json({ error: "Enrollment is not paid" }, { status: 400 });
         }
 
-        const courseTitle = "AI for Beginners";
+        const courseTitle = "AI For Everyone";
         const certificateCode = generateCertificateCode();
         const issuedAt = new Date();
         const expiresAt = new Date(issuedAt.getTime() + 90 * 24 * 60 * 60 * 1000); // 90 days

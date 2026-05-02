@@ -1,4 +1,5 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import WhatsappFab from "@/components/WhatsappFab";
 
 import appCss from "../styles.css?url";
 
@@ -11,6 +12,8 @@ function runtimeEnvScript() {
       process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
       process.env.SB_PUBLISHABLE_KEY ||
       "",
+      VITE_WHATSAPP_NUMBER:
+        process.env.VITE_WHATSAPP_NUMBER || process.env.WHATSAPP_NUMBER || "+254116380935",
   };
 
   return {
@@ -107,6 +110,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+          <WhatsappFab />
         <Scripts />
       </body>
     </html>
